@@ -1,41 +1,26 @@
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
-import icon from '../../assets/icon.svg';
 import './App.css';
+import Watchlist from './Views/Watchlist/Watchlist';
+import Positions from './Views/Positions/Positions';
+import PAndL from './Views/P&L/PAndL';
 
 const Hello = () => {
   return (
-    <div>
-      <div className="Hello">
-        <img width="200px" alt="icon" src={icon} />
+    <div className="App">
+    <div className='AppContainer'>
+      <div className='LeftView'>
+        <Watchlist />
       </div>
-      <h1>electron-react-boilerplate</h1>
-      <div className="Hello">
-        <a
-          href="https://electron-react-boilerplate.js.org/"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <button type="button">
-            <span role="img" aria-label="books">
-              📚
-            </span>
-            Read our docs
-          </button>
-        </a>
-        <a
-          href="https://github.com/sponsors/electron-react-boilerplate"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <button type="button">
-            <span role="img" aria-label="books">
-              🙏
-            </span>
-            Donate
-          </button>
-        </a>
+      <div className='RightView'>
+        <div className='PandL'>
+          <PAndL />
+        </div>
+        <div className='Positions'>
+          <Positions />
+        </div>
       </div>
     </div>
+  </div>
   );
 };
 
