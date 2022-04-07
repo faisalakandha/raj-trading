@@ -4,7 +4,7 @@ import Watchlist from './Views/Watchlist/Watchlist';
 import Positions from './Views/Positions/Positions';
 import PAndL from './Views/P&L/PAndL';
 
-const Hello = () => {
+const Home = () => {
   return (
     <div className="App">
       <div className="AppContainer">
@@ -28,7 +28,7 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Hello />} />
+        <Route path="/" element={<Home />} />
       </Routes>
     </Router>
   );
