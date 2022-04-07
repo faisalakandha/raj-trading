@@ -7,20 +7,20 @@ import PAndL from './Views/P&L/PAndL';
 const Hello = () => {
   return (
     <div className="App">
-    <div className='AppContainer'>
-      <div className='LeftView'>
-        <Watchlist />
-      </div>
-      <div className='RightView'>
-        <div className='PandL'>
-          <PAndL />
+      <div className="AppContainer">
+        <div className="LeftView">
+          <Watchlist />
         </div>
-        <div className='Positions'>
-          <Positions />
+        <div className="RightView">
+          <div className="PandL">
+            <PAndL />
+          </div>
+          <div className="Positions">
+            <Positions />
+          </div>
         </div>
       </div>
     </div>
-  </div>
   );
 };
 
