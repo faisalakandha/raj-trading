@@ -12,21 +12,21 @@ const Watchlist = () => {
         },
         {
             id: '2',
-            name: 'Sample2',
+            name: 'Test2',
             tag: 'ss',
             price: '30',
             percentage: '20',
         },
         {
             id: '3',
-            name: 'Sample3',
+            name: 'Beta3',
             tag: 's1s',
             price: '40',
             percentage: '15',
         },
         {
             id: '4',
-            name: 'Sample4',
+            name: 'Alpha4',
             tag: 'pp',
             price: '50',
             percentage: '18',
@@ -47,12 +47,18 @@ const Watchlist = () => {
         let value = e.target.value.toLowerCase();
         let result = [];
         result = fakeWatchListData.filter((data) => {
-            console.log(data.name.search(value) != -1);
-            return data.name.search(value) != -1;
+            //console.log(data.name.toLowerCase().search(value) != -1);
+            return data.name.toLowerCase().search(value) != -1;
         });
-        setWatchlistData(result);
-        console.log(watclistData);
-        console.log(e.target.value);
+        console.log('result', result);
+        if (value.length !== 0) {
+            setWatchlistData(result);
+        }
+        else {
+            setWatchlistData([]);
+        }
+        //console.log("Watchlist Data", watclistData);
+        //console.log(e.target.value);
     }
 
     const handleAddBtn = (data) => {
