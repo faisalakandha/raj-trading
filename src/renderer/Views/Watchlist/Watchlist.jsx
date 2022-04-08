@@ -47,7 +47,8 @@ const Watchlist = () => {
         let value = e.target.value.toLowerCase();
         let result = [];
         result = fakeWatchListData.filter((data) => {
-            return data.name.includes(value);
+            console.log(data.name.search(value) != -1);
+            return data.name.search(value) != -1;
         });
         setWatchlistData(result);
         console.log(watclistData);
