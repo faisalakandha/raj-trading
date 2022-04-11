@@ -12,11 +12,11 @@ const Home = () => {
           <Watchlist />
         </div>
         <div className="RightView">
-          <div className="PandL">
-            <PAndL />
-          </div>
           <div className="Positions">
             <Positions />
+          </div>
+          <div className="PandL">
+            <PAndL />
           </div>
         </div>
       </div>
