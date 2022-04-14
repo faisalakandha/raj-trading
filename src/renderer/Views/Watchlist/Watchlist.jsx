@@ -73,7 +73,7 @@ const Watchlist = () => {
 
     return (
         <div>
-            <Heading as='h2' size='xl' style={{ backgroundColor: 'red', boxShadow: '5px 5px 5px grey' }}>Watchlist</Heading>
+            <Heading as='h2' size='xl' style={{ backgroundColor: 'yellow', boxShadow: '5px 5px 5px grey' }}>Watchlist</Heading>
             <Input type="text" variant='filled' placeholder='Search Bar' name="watchlist-search" id="watchlist-search" onChange={(e) => handleSearch(e)} />
             {
                 watclistData.length !== 0 ?
