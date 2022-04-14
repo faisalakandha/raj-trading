@@ -3,6 +3,17 @@ import './App.css';
 import Watchlist from './Views/Watchlist/Watchlist';
 import Positions from './Views/Positions/Positions';
 import PAndL from './Views/P&L/PAndL';
+import { extendTheme, ChakraProvider } from '@chakra-ui/react';
+
+const colors = {
+  brand: {
+    900: '#1a365d',
+    800: '#153e75',
+    700: '#2a69ac',
+  },
+}
+
+const theme = extendTheme({ colors })
 
 const Home = () => {
   return (
@@ -26,10 +37,12 @@ const Home = () => {
 
 export default function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-      </Routes>
-    </Router>
+    <ChakraProvider theme={theme}>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+        </Routes>
+      </Router>
+    </ChakraProvider>
   );
 }

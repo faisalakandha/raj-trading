@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import { Input, Button, Heading } from '@chakra-ui/react';
 
 const Watchlist = () => {
 
@@ -72,23 +73,23 @@ const Watchlist = () => {
 
     return (
         <div>
-            <h3>Watchlist</h3>
-            <input type="text" name="watchlist-search" id="watchlist-search" onChange={(e) => handleSearch(e)} />
+            <Heading as='h2' size='xl' style={{ backgroundColor: 'red', boxShadow: '5px 5px 5px grey' }}>Watchlist</Heading>
+            <Input type="text" variant='filled' placeholder='Search Bar' name="watchlist-search" id="watchlist-search" onChange={(e) => handleSearch(e)} />
             {
                 watclistData.length !== 0 ?
 
                     watclistData.map(singleData =>
-                        <div key={singleData.id} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <div key={singleData.id} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '2px', marginTop: '5px', margin: '5px' }}>
                             <div style={{ display: 'flex', justifyContent: 'center', marginRight: '5px' }}>
                                 <p>{singleData.name}</p>
                                 <p>{singleData.price}</p>
                             </div>
                             <div>
-                                <button>B</button>
-                                <button>S</button>
-                                <button>{'->'}</button>
-                                <button>=</button>
-                                <button onClick={() => handleAddBtn(singleData)}>+</button>
+                                <Button>B</Button>
+                                <Button>S</Button>
+                                <Button>{'->'}</Button>
+                                <Button>=</Button>
+                                <Button colorScheme='blue' onClick={() => handleAddBtn(singleData)}>+</Button>
                             </div>
                         </div>
                     )
@@ -97,29 +98,32 @@ const Watchlist = () => {
                         <h5>Empty</h5>
                     </div>
             }
-            {
-                savedTrade.length !== 0 ?
+            <div style={{ marginTop: '5px' }}>
 
-                    savedTrade && savedTrade.map(singleData =>
-                        <div key={singleData.id} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                            <div style={{ display: 'flex', justifyContent: 'center', marginRight: '5px' }}>
-                                <p>{singleData.tag}</p>
-                                <p>{singleData.percentage}</p>
+                {
+                    savedTrade.length !== 0 ?
+
+                        savedTrade && savedTrade.map(singleData =>
+                            <div key={singleData.id} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '2px', marginTop: '5px' }}>
+                                <div style={{ display: 'flex', justifyContent: 'center', marginRight: '5px' }}>
+                                    <p>{singleData.tag}</p>
+                                    <p>{singleData.percentage}</p>
+                                </div>
+                                <div>
+                                    <Button>B</Button>
+                                    <Button>S</Button>
+                                    <Button>{'->'}</Button>
+                                    <Button>=</Button>
+                                    <Button colorScheme='pink' variant='solid' onClick={() => handleDeleteBtn(singleData.id)}>-</Button>
+                                </div>
                             </div>
-                            <div>
-                                <button>B</button>
-                                <button>S</button>
-                                <button>{'->'}</button>
-                                <button>=</button>
-                                <button onClick={() => handleDeleteBtn(singleData.id)}>-</button>
-                            </div>
+                        )
+                        :
+                        <div>
+                            <h5></h5>
                         </div>
-                    )
-                    :
-                    <div>
-                        <h5></h5>
-                    </div>
-            }
+                }
+            </div>
         </div>
     )
 }
