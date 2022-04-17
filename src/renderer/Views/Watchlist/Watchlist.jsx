@@ -9,6 +9,10 @@ const Watchlist = () => {
     const [isShown, setIsShown] = useState(null);
     const [isShown2, setIsShown2] = useState(null);
     const [notFocused, setNotFocused] = useState({ display: 'none' });
+    const [buyClicked, setBuyClicked] = useState({
+        status: false,
+        data: []
+    });
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const fakeWatchListData = [
@@ -152,6 +156,11 @@ const Watchlist = () => {
         //console.log(e.target.value);
     }
 
+    const handleBuyClicked = (singleData) => {
+        setBuyClicked({ status: true, data: singleData });
+        onOpen();
+    }
+
     return (
         <div style={{ height: '-webkit-fill-available' }} >
             <Heading as='h1' size='sm'>Watchlist</Heading>
@@ -179,7 +188,7 @@ const Watchlist = () => {
                             {
                                 isShown === singleData.id && (
                                     <Stack spacing={1} direction={['column', 'row']} align='center' style={{ zIndex: '100' }}>
-                                        <Button colorScheme='blue' size='sm' onClick={() => onOpen()}>B</Button>
+                                        <Button colorScheme='blue' size='sm' onClick={() => handleBuyClicked(singleData)}>B</Button>
                                         <Button bg='orange.300' color='white' size='sm' _hover={{ bg: 'orange.400' }}>S</Button>
                                         <Button size='sm'>{'->'}</Button>
                                         <Button size='sm'>=</Button>
@@ -200,7 +209,7 @@ const Watchlist = () => {
                     </div>
             }
 
-            <TradeOrderBox isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+            <TradeOrderBox buyClicked={buyClicked} setBuyClicked={setBuyClicked} isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
 
             {
 
