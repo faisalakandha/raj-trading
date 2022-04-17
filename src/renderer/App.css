@@ -17,7 +17,7 @@
 .LeftView {
   box-sizing: border-box;
   width: 30%;
-  border: 2px solid cadetblue;
+  border: 1px solid cadetblue;
   /* margin: 5px; */
 }
 
@@ -31,7 +31,7 @@
   width: 75%;
   box-sizing: border-box;
   /* height: 60%; */
-  border: 2px solid cadetblue;
+  border: 1px solid cadetblue;
   /* margin: 5px;
   margin-bottom: 0px; */
 }
@@ -40,7 +40,7 @@
   width: 25%;
   box-sizing: border-box;
   /* height: 40%; */
-  border: 2px solid cadetblue;
+  border: 1px solid cadetblue;
   /* margin: 5px; */
 }
 

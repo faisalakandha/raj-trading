@@ -18,15 +18,15 @@ const theme = extendTheme({ colors })
 const Home = () => {
   return (
     <div className="App">
-      <div className="AppContainer">
-        <div className="LeftView">
+      <div className="AppContainer" style={{ backgroundColor: 'white'}} >
+        <div className="LeftView" style={{ backgroundColor: '#f5faff', boxShadow:'0px 0px 2px 2px grey'}}>
           <Watchlist />
         </div>
-        <div className="RightView">
-          <div className="Positions">
+        <div className="RightView" >
+          <div className="Positions" style={{ backgroundColor: '#f5faff', boxShadow:'0px 0px 2px 2px grey',marginLeft: '13px',marginRight: '13px'}}>
             <Positions />
           </div>
-          <div className="PandL">
+          <div className="PandL" style={{ backgroundColor: '#f5faff', boxShadow:'0px 0px 2px 2px grey'}}>
             <PAndL />
           </div>
         </div>
