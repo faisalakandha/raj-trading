@@ -11,8 +11,5 @@
     "link-modules": "node -r ts-node/register ../../.erb/scripts/link-modules.ts",
     "postinstall": "npm run electron-rebuild && npm run link-modules"
   },
-  "dependencies": {
-    "better-sqlite3": "^7.5.1"
-  },
   "license": "MIT"
 }
