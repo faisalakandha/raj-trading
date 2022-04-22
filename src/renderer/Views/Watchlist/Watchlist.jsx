@@ -156,8 +156,13 @@ const Watchlist = () => {
         //console.log(e.target.value);
     }
 
-    const handleBuyClicked = (singleData) => {
-        setBuyClicked({ status: true, data: singleData });
+    const handleBuySellClicked = (singleData, flag) => {
+        if (flag === 'B') {
+            setBuyClicked({ status: true, data: singleData });
+        }
+        if (flag === 'S') {
+            setBuyClicked({ status: false, data: singleData });
+        }
         onOpen();
     }
 
@@ -188,8 +193,8 @@ const Watchlist = () => {
                             {
                                 isShown === singleData.id && (
                                     <Stack spacing={1} direction={['column', 'row']} align='center' style={{ zIndex: '100' }}>
-                                        <Button colorScheme='blue' size='sm' onClick={() => handleBuyClicked(singleData)}>B</Button>
-                                        <Button bg='orange.300' color='white' size='sm' _hover={{ bg: 'orange.400' }}>S</Button>
+                                        <Button colorScheme='blue' size='sm' onClick={() => handleBuySellClicked(singleData, 'B')}>B</Button>
+                                        <Button onClick={() => handleBuySellClicked(singleData, 'S')} bg='orange.300' color='white' size='sm' _hover={{ bg: 'orange.400' }}>S</Button>
                                         <Button size='sm'>{'->'}</Button>
                                         <Button size='sm'>=</Button>
                                         <Button size='sm' colorScheme='green'
@@ -240,8 +245,8 @@ const Watchlist = () => {
                                     {
                                         isShown2 === singleData.id &&
                                         <Stack spacing={1} direction={['column', 'row']} align='center'>
-                                            <Button size='sm'>B</Button>
-                                            <Button size='sm'>S</Button>
+                                            <Button colorScheme='blue' size='sm' onClick={() => handleBuySellClicked(singleData, 'B')}>B</Button>
+                                            <Button onClick={() => handleBuySellClicked(singleData, 'S')} bg='orange.300' color='white' size='sm' _hover={{ bg: 'orange.400' }}>S</Button>
                                             <Button size='sm'>{'->'}</Button>
                                             <Button size='sm'>=</Button>
                                             <Button size='sm' colorScheme='red' variant='solid' onClick={() => handleDeleteBtn(singleData.id)}>-</Button>
