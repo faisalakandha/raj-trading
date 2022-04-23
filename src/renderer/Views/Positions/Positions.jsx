@@ -63,33 +63,35 @@ const Positions = () => {
 
     const customStyle = {
         'display': 'flex',
-        'justify-content': 'space-around',
-        'align-items': 'center'
+        'justify-content': 'space-between',
+        'align-items': 'center',
     }
 
     const [positions, setPositions] = useState(fakePositionsData);
 
     return (
         <div>
-            <Heading as='h1' size='sm'>Positions</Heading>
+            <Heading pt='10px' pb='5px' as='h1' size='sm'>Positions</Heading>
             <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                 {
                     positions && positions.map(singleData =>
-                        <Box boxShadow={'0 7px 30px -10px rgba(150,170,180,0.5)'} bgColor={'cyan.100'} color={'black'} p='10px' w='80%' mt='10px' maxW='md' borderWidth='0px' borderRadius='lg' key={singleData.id}>
-                            <div style={customStyle}>
+                        <Box boxShadow={'0 7px 30px -10px rgba(150,170,180,0.5)'} bgColor={'cyan.100'} color={'black'} px='20px' py='15px' w='80%' mt='10px' maxW='md' borderWidth='0px' borderRadius='lg' key={singleData.id}
+                            style={customStyle}
+                        >
+                            <div>
                                 <div style={customStyle}>
                                     <Text fontSize='sm'>{singleData.titlle}</Text>
                                     <Text fontSize='sm' ml='10px' >{singleData.tag1}</Text>
                                 </div>
-                                <div style={customStyle}>
-                                    <Text fontSize='sm'>{singleData.tag2}</Text>
-                                    <Text fontSize='sm'>{singleData.duration}</Text>
-                                    <Text fontSize='sm'>{singleData.count1}</Text>
-                                    <Text fontSize='sm'> at </Text>
-                                    <Text fontSize='sm'>{singleData.price1}</Text>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <Text color='gray.500' fontSize='sm'>{singleData.tag2}</Text>
+                                    <Text color='gray.500' ml='5px' fontSize='sm'>{singleData.duration}</Text>
+                                    <Text color='gray.500' ml='5px' fontSize='sm'>{singleData.count1}</Text>
+                                    <Text color='gray.500' ml='5px' fontSize='sm'> at </Text>
+                                    <Text color='gray.500' ml='5px' fontSize='sm'>{singleData.price1}</Text>
                                 </div>
                             </div>
-                            <div style={customStyle}>
+                            <div>
                                 <Text fontSize='sm'>LTP: {singleData.price2}</Text>
                                 <Text fontWeight='bold' fontSize='sm' color={singleData.change > 0 ? 'green.600' : 'red.300'} >{singleData.change}</Text>
                             </div>

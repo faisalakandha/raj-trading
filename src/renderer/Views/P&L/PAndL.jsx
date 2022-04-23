@@ -1,9 +1,10 @@
-import React from 'react'
+import { Heading } from '@chakra-ui/react';
+import React from 'react';
 
 const PAndL = () => {
     return (
         <div>
-            <h3> PAndL </h3>
+            <Heading as='h1' size='sm'>Profit & <br /> Looses</Heading>
         </div>
     )
 }
