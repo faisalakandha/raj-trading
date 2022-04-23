@@ -51,6 +51,55 @@ const Watchlist = () => {
             price: '60',
             percentage: '40',
         },
+        {
+            id: '6',
+            name: 'Sample5',
+            tag: 'ra',
+            price: '60',
+            percentage: '40',
+        },
+        {
+            id: '7',
+            name: 'Sample5',
+            tag: 'ra',
+            price: '60',
+            percentage: '40',
+        },
+        {
+            id: '8',
+            name: 'Sample5',
+            tag: 'ra',
+            price: '60',
+            percentage: '40',
+        },
+        {
+            id: '9',
+            name: 'Sample5',
+            tag: 'ra',
+            price: '60',
+            percentage: '40',
+        },
+        {
+            id: '10',
+            name: 'Sample5',
+            tag: 'ra',
+            price: '60',
+            percentage: '40',
+        },
+        {
+            id: '11',
+            name: 'Sample5',
+            tag: 'ra',
+            price: '60',
+            percentage: '40',
+        },
+        {
+            id: '12',
+            name: 'Sample5',
+            tag: 'ra',
+            price: '60',
+            percentage: '40',
+        },
     ];
 
     function containsObject(obj, list) {
@@ -167,7 +216,7 @@ const Watchlist = () => {
     }
 
     return (
-        <div style={{ height: '-webkit-fill-available' }} >
+        <div style={{ height: '-webkit-fill-available', overflow: 'auto' }} >
             <Heading pt='10px' pb='15px' as='h1' size='sm'>Watchlist</Heading>
             <Tooltip label='Search Trades' placement='right'>
                 <Input style={{ padding: '15px 10px', width: '90%' }} size='md' type="text" variant='filled' placeholder='Search Bar' name="watchlist-search" id="watchlist-search" onChange={(e) => handleSearch(e)} onFocus={() => setNotFocused({ display: 'none' })} />
@@ -180,7 +229,7 @@ const Watchlist = () => {
                         watclistData.map(singleData =>
                             <Box key={singleData.id} style={{ width: '98%', display: 'flex', justifyContent: 'space-evenly', flexDirection: 'column', alignItems: 'center' }}
 
-                                boxShadow={'0 7px 30px -10px rgba(150,170,180,0.5)'} bgColor={'skyBlue.100'} color={'black'} p='10px' mt='10px' maxW='md' borderWidth='0px' borderRadius='lg' ml='5px'
+                                boxShadow={'0 7px 30px -10px rgba(150,170,180,0.5)'} bgColor={'skyBlue.100'} color={'black'} p='10px' mt='10px' maxW='md' borderWidth='0px' borderRadius='lg'
 
                                 onMouseEnter={() => setIsShown(singleData.id)}
                                 onMouseLeave={() => setIsShown(null)}

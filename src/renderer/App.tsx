@@ -150,7 +150,7 @@ const Home = () => {
     <div className="App">
       <Box>
         <div className="AppContainer">
-          <Box bgColor={'white'} className="LeftView">
+          <Box style={{ height: '-webkit-fill-available' }} bgColor={'white'} className="LeftView">
             <Watchlist />
           </Box>
           <div className="RightView">

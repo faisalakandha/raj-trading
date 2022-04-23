@@ -16,7 +16,7 @@ const Positions = () => {
             change: 5.67,
         },
         {
-            id: '2',
+            id: 2,
             titlle: 'RELIANCE',
             tag1: 'NSE',
             tag2: 'CNC',
@@ -49,7 +49,73 @@ const Positions = () => {
             change: 5.67,
         },
         {
-            id: '5',
+            id: 5,
+            titlle: 'USHAMART',
+            tag1: 'NSE',
+            tag2: 'CNC',
+            duration: 'Long',
+            count1: 20,
+            price1: 71.7550,
+            price2: 71.7550,
+            change: 5.67,
+        },
+        {
+            id: 6,
+            titlle: 'USHAMART',
+            tag1: 'NSE',
+            tag2: 'CNC',
+            duration: 'Long',
+            count1: 20,
+            price1: 71.7550,
+            price2: 71.7550,
+            change: 5.67,
+        },
+        {
+            id: 7,
+            titlle: 'USHAMART',
+            tag1: 'NSE',
+            tag2: 'CNC',
+            duration: 'Long',
+            count1: 20,
+            price1: 71.7550,
+            price2: 71.7550,
+            change: 5.67,
+        },
+        {
+            id: 8,
+            titlle: 'USHAMART',
+            tag1: 'NSE',
+            tag2: 'CNC',
+            duration: 'Long',
+            count1: 20,
+            price1: 71.7550,
+            price2: 71.7550,
+            change: 5.67,
+        },
+        {
+            id: 9,
+            titlle: 'USHAMART',
+            tag1: 'NSE',
+            tag2: 'CNC',
+            duration: 'Long',
+            count1: 20,
+            price1: 71.7550,
+            price2: 71.7550,
+            change: 5.67,
+        },
+        {
+            id: 10,
+            titlle: 'USHAMART',
+            tag1: 'NSE',
+            tag2: 'CNC',
+            duration: 'Long',
+            count1: 20,
+            price1: 71.7550,
+            price2: 71.7550,
+            change: 5.67,
+        },
+        {
+            id: 11,
             titlle: 'USHAMART',
             tag1: 'NSE',
             tag2: 'CNC',
@@ -70,7 +136,7 @@ const Positions = () => {
     const [positions, setPositions] = useState(fakePositionsData);
 
     return (
-        <div>
+        <div style={{ height: '-webkit-fill-available', overflow: 'auto' }}>
             <Heading pt='10px' pb='5px' as='h1' size='sm'>Positions</Heading>
             <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                 {
