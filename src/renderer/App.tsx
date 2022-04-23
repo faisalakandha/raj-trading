@@ -148,7 +148,7 @@ const theme = extendTheme({ colors })
 const Home = () => {
   return (
     <div className="App">
-      <Box bgColor={'cyan.50'}>
+      <Box bgColor={'grey.200'}>
         <div className="AppContainer">
           <Box bgColor={'white'} className="LeftView">
             <Watchlist />
