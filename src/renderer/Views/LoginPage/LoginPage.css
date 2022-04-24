@@ -1,0 +1,37 @@
+.BackgroundContainer {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+.BackgroundContainer img {
+  width: 100%;
+  height: 100%;
+}
+.backgroundBtn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: none;
+  color: #ffffff;
+  padding: 10px 100px;
+  text-align: center;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1rem;
+  background-color: #3eb2fd;
+  background-image: linear-gradient(1deg, #4f58fd, #149bf3 99%);
+  background-size: calc(100% + 20px) calc(100% + 20px);
+  border-radius: 100px;
+  line-height: 1.5;
+  transition: background-color 0.2s, background-position 0.2s;
+}
+.vedioBtn:hover {
+  background-position: -20px -20px;
+}
+
+body{
+  overflow: hidden;
+}
