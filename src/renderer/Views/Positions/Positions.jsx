@@ -6,7 +6,7 @@ const Positions = () => {
     const fakePositionsData = [
         {
             id: 1,
-            titlle: 'USHAMART',
+            title: 'USHAMART',
             tag1: 'NSE',
             tag2: 'CNC',
             duration: 'Long',
@@ -17,7 +17,7 @@ const Positions = () => {
         },
         {
             id: 2,
-            titlle: 'RELIANCE',
+            title: 'RELIANCE',
             tag1: 'NSE',
             tag2: 'CNC',
             duration: 'Long',
@@ -28,7 +28,7 @@ const Positions = () => {
         },
         {
             id: 3,
-            titlle: 'RELIANCE',
+            title: 'RELIANCE',
             tag1: 'NSE',
             tag2: 'CNC',
             duration: 'Short',
@@ -39,7 +39,7 @@ const Positions = () => {
         },
         {
             id: 4,
-            titlle: 'USHAMART',
+            title: 'USHAMART',
             tag1: 'NSE',
             tag2: 'CNC',
             duration: 'Short',
@@ -50,7 +50,7 @@ const Positions = () => {
         },
         {
             id: 5,
-            titlle: 'USHAMART',
+            title: 'USHAMART',
             tag1: 'NSE',
             tag2: 'CNC',
             duration: 'Long',
@@ -61,7 +61,7 @@ const Positions = () => {
         },
         {
             id: 6,
-            titlle: 'USHAMART',
+            title: 'USHAMART',
             tag1: 'NSE',
             tag2: 'CNC',
             duration: 'Long',
@@ -72,18 +72,18 @@ const Positions = () => {
         },
         {
             id: 7,
-            titlle: 'USHAMART',
+            title: 'USHAMART',
             tag1: 'NSE',
             tag2: 'CNC',
             duration: 'Long',
             count1: 20,
             price1: 71.7550,
             price2: 71.7550,
-            change: 5.67,
+            change: -5.67,
         },
         {
             id: 8,
-            titlle: 'USHAMART',
+            title: 'USHAMART',
             tag1: 'NSE',
             tag2: 'CNC',
             duration: 'Long',
@@ -94,7 +94,7 @@ const Positions = () => {
         },
         {
             id: 9,
-            titlle: 'USHAMART',
+            title: 'USHAMART',
             tag1: 'NSE',
             tag2: 'CNC',
             duration: 'Long',
@@ -105,18 +105,18 @@ const Positions = () => {
         },
         {
             id: 10,
-            titlle: 'USHAMART',
+            title: 'USHAMART',
             tag1: 'NSE',
             tag2: 'CNC',
             duration: 'Long',
             count1: 20,
             price1: 71.7550,
             price2: 71.7550,
-            change: 5.67,
+            change: -5.67,
         },
         {
             id: 11,
-            titlle: 'USHAMART',
+            title: 'USHAMART',
             tag1: 'NSE',
             tag2: 'CNC',
             duration: 'Long',
@@ -146,7 +146,7 @@ const Positions = () => {
                         >
                             <div>
                                 <div style={customStyle}>
-                                    <Text fontSize='sm'>{singleData.titlle}</Text>
+                                    <Text fontSize='sm'>{singleData.title}</Text>
                                     <Text fontSize='sm' ml='10px' >{singleData.tag1}</Text>
                                 </div>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
