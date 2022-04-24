@@ -4,6 +4,7 @@ import Watchlist from './Views/Watchlist/Watchlist';
 import Positions from './Views/Positions/Positions';
 import PAndL from './Views/P&L/PAndL';
 import { extendTheme, ChakraProvider, Box } from '@chakra-ui/react';
+import LoginPage from './Views/LoginPage/LoginPage';
 
 const colors = {
   brand: {
@@ -172,7 +173,7 @@ export default function App() {
     <ChakraProvider theme={theme}>
       <Router>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<LoginPage />} />
         </Routes>
       </Router>
     </ChakraProvider>

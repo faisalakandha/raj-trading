@@ -100,12 +100,12 @@ const configuration: webpack.Configuration = {
     ...(requiredByDLLConfig
       ? []
       : [
-          new webpack.DllReferencePlugin({
-            context: webpackPaths.dllPath,
-            manifest: require(manifest),
-            sourceType: 'var',
-          }),
-        ]),
+        new webpack.DllReferencePlugin({
+          context: webpackPaths.dllPath,
+          manifest: require(manifest),
+          sourceType: 'var',
+        }),
+      ]),
 
     new webpack.NoEmitOnErrorsPlugin(),
 
