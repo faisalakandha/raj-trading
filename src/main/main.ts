@@ -15,6 +15,9 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+const Store = require('electron-store');
+
+const store = new Store();
 
 require('../backend/index');
 
@@ -139,7 +142,10 @@ app
   })
   .catch(console.log);
 
-  ipcMain.on("event:OpentAuthWindow", (event, args) => {
-    AuthWindow();
-    console.log(args);
+  ipcMain.handle("event:OpentAuthWindow", (event, args) => {
+    const state = AuthWindow();
+    const checkToken = store.get('access_token');
+    //console.log("CHECKTOKEN TEST :" + checkToken);
+
+    return state;
   });

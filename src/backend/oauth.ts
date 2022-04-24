@@ -1,4 +1,5 @@
 import { BrowserWindow } from 'electron';
+import { check } from 'prettier';
 
 const Store = require('electron-store');
 const fyers = require('fyers-api-v2');
@@ -12,8 +13,8 @@ export default function AuthWindow()
 {
 
   store.delete('access_token');
-  console.log("After token clear: " + store.get('access_token'));
-const authUrl =
+
+  const authUrl =
   'https://api.fyers.in/api/v2/generate-authcode?client_id=FMR00CRGAK-100&redirect_uri=http://localhost:3000/&response_type=code&state=sample_state';
 
 const authWindow = new BrowserWindow({
@@ -49,15 +50,11 @@ authWindow.webContents.on('will-navigate', function (event, newUrl) {
   token
     .then(async () => {
       const d = await token;
-      if(!empty(d))
-      {
-        store.set('access_token', d);
-        console.log(d);
-        authWindow.close();
-      }
-      else{
-        console.log("Token Expired !");
-      }
+      store.set('access_token', d);
+      const checkToken = store.get('access_token');
+      console.log("CHECKTOKEN TEST :" + checkToken);
+      authWindow.close();
+
 
     })
     .catch(() => {
@@ -65,35 +62,4 @@ authWindow.webContents.on('will-navigate', function (event, newUrl) {
     });
 });
 
-
 }
-
-
-//#region
-function empty( val ) {
-
-      if (val === undefined)
-      return true;
-
-  if (typeof (val) == 'function' || typeof (val) == 'number' || typeof (val) == 'boolean' || Object.prototype.toString.call(val) === '[object Date]')
-      return false;
-
-  if (val == null || val.length === 0)        // null or 0 length array
-      return true;
-
-  if (typeof (val) == "object") {
-      // empty object
-
-      var r = true;
-
-      for (var f in val)
-          r = false;
-
-      return r;
-  }
-
-  return false;
-}
-
-
-//#endregion

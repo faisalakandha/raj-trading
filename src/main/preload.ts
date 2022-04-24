@@ -26,6 +26,6 @@ contextBridge.exposeInMainWorld('electron', {
       }
     },
     OpenAuthWindow: (msg: string) =>
-      ipcRenderer.send('event:OpentAuthWindow', msg),
+      ipcRenderer.invoke('event:OpentAuthWindow', msg),
   },
 });
