@@ -3,7 +3,7 @@ import './App.css';
 import Watchlist from './Views/Watchlist/Watchlist';
 import Positions from './Views/Positions/Positions';
 import PAndL from './Views/P&L/PAndL';
-import { extendTheme, ChakraProvider } from '@chakra-ui/react';
+import { extendTheme, ChakraProvider, Box } from '@chakra-ui/react';
 
 const colors = {
   brand: {
@@ -148,19 +148,21 @@ const theme = extendTheme({ colors })
 const Home = () => {
   return (
     <div className="App">
-      <div className="AppContainer">
-        <div className="LeftView">
-          <Watchlist />
-        </div>
-        <div className="RightView">
-          <div className="Positions">
-            <Positions />
+      <Box>
+        <div className="AppContainer">
+          <Box style={{ height: '-webkit-fill-available' }} bgColor={'white'} className="LeftView">
+            <Watchlist />
+          </Box>
+          <div className="RightView">
+            <Box bgColor={'white'} className="Positions">
+              <Positions />
+            </Box>
+            <Box bgColor={'white'} className="PandL">
+              <PAndL />
+            </Box>
           </div>
-          <div className="PandL">
-            <PAndL />
-          </div>
         </div>
-      </div>
+      </Box>
     </div>
   );
 };

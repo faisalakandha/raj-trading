@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Input, Button, Heading, Stack, Tooltip, useDisclosure } from '@chakra-ui/react';
+import { Input, Button, Heading, Stack, Tooltip, useDisclosure, Box, ScaleFade, Text } from '@chakra-ui/react';
 import TradeOrderBox from '../OrderBox/TradeOrderBox';
 
 const Watchlist = () => {
@@ -46,6 +46,55 @@ const Watchlist = () => {
         },
         {
             id: '5',
+            name: 'Sample5',
+            tag: 'ra',
+            price: '60',
+            percentage: '40',
+        },
+        {
+            id: '6',
+            name: 'Sample5',
+            tag: 'ra',
+            price: '60',
+            percentage: '40',
+        },
+        {
+            id: '7',
+            name: 'Sample5',
+            tag: 'ra',
+            price: '60',
+            percentage: '40',
+        },
+        {
+            id: '8',
+            name: 'Sample5',
+            tag: 'ra',
+            price: '60',
+            percentage: '40',
+        },
+        {
+            id: '9',
+            name: 'Sample5',
+            tag: 'ra',
+            price: '60',
+            percentage: '40',
+        },
+        {
+            id: '10',
+            name: 'Sample5',
+            tag: 'ra',
+            price: '60',
+            percentage: '40',
+        },
+        {
+            id: '11',
+            name: 'Sample5',
+            tag: 'ra',
+            price: '60',
+            percentage: '40',
+        },
+        {
+            id: '12',
             name: 'Sample5',
             tag: 'ra',
             price: '60',
@@ -156,58 +205,74 @@ const Watchlist = () => {
         //console.log(e.target.value);
     }
 
-    const handleBuyClicked = (singleData) => {
-        setBuyClicked({ status: true, data: singleData });
+    const handleBuySellClicked = (singleData, flag) => {
+        if (flag === 'B') {
+            setBuyClicked({ status: true, data: singleData });
+        }
+        if (flag === 'S') {
+            setBuyClicked({ status: false, data: singleData });
+        }
         onOpen();
     }
 
     return (
-        <div style={{ height: '-webkit-fill-available' }} >
-            <Heading as='h1' size='sm'>Watchlist</Heading>
+        <div style={{ height: '-webkit-fill-available', overflow: 'auto' }} >
+            <Heading pt='10px' pb='15px' as='h1' size='sm'>Watchlist</Heading>
             <Tooltip label='Search Trades' placement='right'>
                 <Input style={{ padding: '15px 10px', width: '90%' }} size='md' type="text" variant='filled' placeholder='Search Bar' name="watchlist-search" id="watchlist-search" onChange={(e) => handleSearch(e)} onFocus={() => setNotFocused({ display: 'none' })} />
             </Tooltip>
             {/* onBlur={() => handleWatchlistBlur()} */}
-            {
-                watclistData.length !== 0 ?
+            <div style={{ display: 'flex', justifyContent: 'space-evenly', flexDirection: 'column', alignItems: 'center' }} >
+                {
+                    watclistData.length !== 0 ?
 
-                    watclistData.map(singleData =>
-                        <div key={singleData.id} style={{ width: '99%', padding: '2px', marginTop: '5px', margin: '5px', display: 'flex', justifyContent: 'space-evenly', flexDirection: 'column', alignItems: 'center', border: '1px solid #9171dc', borderRadius: '5px', backgroundColor: '#e8f3ff' }} onMouseEnter={() => setIsShown(singleData.id)}
-                            onMouseLeave={() => setIsShown(null)}
-                        >
-                            <Tooltip label='Click To Add' placement='right'>
-                                <div style={{ display: 'flex', justifyContent: 'space-evenly', padding: '5px', cursor: 'pointer' }}
-                                    onClick={() => handleAddBtn(singleData)}
-                                >
-                                    <div style={{ marginRight: '5px' }}>{singleData.name}</div>
-                                    <div style={{ marginRight: '5px' }}>{singleData.id}</div>
-                                    <div>{singleData.price}</div>
-                                </div>
-                            </Tooltip>
+                        watclistData.map(singleData =>
+                            <Box key={singleData.id} style={{ width: '98%', display: 'flex', justifyContent: 'space-evenly', flexDirection: 'column', alignItems: 'center' }}
 
+                                boxShadow={'0 7px 30px -10px rgba(150,170,180,0.5)'} bgColor={'skyBlue.100'} color={'black'} p='10px' mt='10px' maxW='md' borderWidth='0px' borderRadius='lg'
+
+                                onMouseEnter={() => setIsShown(singleData.id)}
+                                onMouseLeave={() => setIsShown(null)}
+                            >
+                                <Tooltip label='Click To Add' placement='right'>
+                                    <Box w='95%' style={{ display: 'flex', justifyContent: 'space-evenly', cursor: 'pointer' }}
+                                        onClick={() => handleAddBtn(singleData)}
+                                        bg='whiteAlpha.900'
+                                        boxShadow={' rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px'}
+                                        p='10px' mt='10px' mb='10px' borderWidth='0px' borderRadius='md'
+                                    >
+                                        <div style={{ marginRight: '5px' }}>{singleData.name}</div>
+                                        <div style={{ marginRight: '5px' }}>{singleData.id}</div>
+                                        <div>{singleData.price}</div>
+                                    </Box>
+                                </Tooltip>
+
+                                {
+                                    isShown === singleData.id && (
+                                        <ScaleFade initialScale={0.9} in={isShown}>
+                                            <Stack spacing={1} direction={['column', 'row']} align='center' style={{ zIndex: '100' }}>
+                                                <Button colorScheme='blue' size='sm' onClick={() => handleBuySellClicked(singleData, 'B')}>B</Button>
+                                                <Button onClick={() => handleBuySellClicked(singleData, 'S')} bg='orange.300' color='white' size='sm' _hover={{ bg: 'orange.400' }}>S</Button>
+                                                <Button size='sm'>{'->'}</Button>
+                                                <Button size='sm'>=</Button>
+                                                <Button size='sm' colorScheme='green'
+                                                    onClick={() => handleMultipleAddBtn(singleData)}
+                                                >+</Button>
+                                            </Stack>
+                                        </ScaleFade>
+                                    )
+                                }
+                            </Box>
+                        )
+                        :
+                        <div>
                             {
-                                isShown === singleData.id && (
-                                    <Stack spacing={1} direction={['column', 'row']} align='center' style={{ zIndex: '100' }}>
-                                        <Button colorScheme='blue' size='sm' onClick={() => handleBuyClicked(singleData)}>B</Button>
-                                        <Button bg='orange.300' color='white' size='sm' _hover={{ bg: 'orange.400' }}>S</Button>
-                                        <Button size='sm'>{'->'}</Button>
-                                        <Button size='sm'>=</Button>
-                                        <Button size='sm' colorScheme='green'
-                                            onClick={() => handleMultipleAddBtn(singleData)}
-                                        >+</Button>
-                                    </Stack>
-                                )
+                                savedTrade.length === 0 &&
+                                <Text color='gray.400' fontSize='xs'>Empty Watch List, Try Searching</Text>
                             }
                         </div>
-                    )
-                    :
-                    <div>
-                        {
-                            savedTrade.length === 0 &&
-                            <h5>Empty Watch List, Try Searching</h5>
-                        }
-                    </div>
-            }
+                }
+            </div>
 
             <TradeOrderBox buyClicked={buyClicked} setBuyClicked={setBuyClicked} isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
 
@@ -224,32 +289,47 @@ const Watchlist = () => {
                     </div>
                 </Tooltip>
             }
-            <div style={{ marginTop: '5px' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center', marginTop: '5px' }}>
+
+                {
+
+                }
 
                 {
                     savedTrade.length !== 0 ?
 
                         savedTrade.map(singleData =>
-                            <div key={singleData.id} style={notFocused} onMouseEnter={() => setIsShown2(singleData.id)}
-                                onMouseLeave={() => setIsShown2(null)}>
-                                <div style={{ width: '99%', padding: '2px', marginTop: '5px', margin: '5px', display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center', border: '1px solid #9171dc', borderRadius: '5px' }}>
-                                    <div style={{ display: 'flex', justifyContent: 'center', marginRight: '5px' }}>
+                            <Box w='98%' key={singleData.id} style={notFocused} onMouseEnter={() => setIsShown2(singleData.id)}
+                                onMouseLeave={() => setIsShown2(null)}
+
+                            >
+                                <Box style={{ width: '98%', display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}
+
+                                    boxShadow={'0 7px 30px -10px rgba(150,170,180,0.5)'} bgColor={'blue.200'} color={'black'} p='10px' mt='10px' borderWidth='0px' borderRadius='lg'
+                                >
+                                    <Box style={{ width: '100%', display: 'flex', justifyContent: 'space-evenly', marginRight: '5px' }}
+                                        bg='whiteAlpha.900'
+                                        boxShadow={' rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px'}
+                                        p='10px' mt='10px' mb='10px' borderWidth='0px' borderRadius='md'
+                                    >
                                         <p>{singleData.tag}</p>
                                         <p>{singleData.percentage}</p>
-                                    </div>
+                                    </Box>
                                     {
                                         isShown2 === singleData.id &&
-                                        <Stack spacing={1} direction={['column', 'row']} align='center'>
-                                            <Button size='sm'>B</Button>
-                                            <Button size='sm'>S</Button>
-                                            <Button size='sm'>{'->'}</Button>
-                                            <Button size='sm'>=</Button>
-                                            <Button size='sm' colorScheme='red' variant='solid' onClick={() => handleDeleteBtn(singleData.id)}>-</Button>
-                                        </Stack>
+                                        <ScaleFade initialScale={0.9} in={isShown2}>
+                                            <Stack spacing={1} direction={['column', 'row']} align='center'>
+                                                <Button colorScheme='blue' size='sm' onClick={() => handleBuySellClicked(singleData, 'B')}>B</Button>
+                                                <Button onClick={() => handleBuySellClicked(singleData, 'S')} bg='orange.300' color='white' size='sm' _hover={{ bg: 'orange.400' }}>S</Button>
+                                                <Button size='sm'>{'->'}</Button>
+                                                <Button size='sm'>=</Button>
+                                                <Button size='sm' colorScheme='red' variant='solid' onClick={() => handleDeleteBtn(singleData.id)}>-</Button>
+                                            </Stack>
+                                        </ScaleFade>
                                     }
 
-                                </div>
-                            </div>
+                                </Box>
+                            </Box>
                         )
                         :
                         <div>
