@@ -8,6 +8,7 @@
  * When running `npm run build` or `npm run build:main`, this file is compiled to
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
+import AuthWindow from '../backend/oauth';
 import path from 'path';
 import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
@@ -130,7 +131,6 @@ app
   .whenReady()
   .then(() => {
     createWindow();
-    require('../backend/oauth');
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the
       // dock icon is clicked and there are no other windows open.
@@ -138,3 +138,8 @@ app
     });
   })
   .catch(console.log);
+
+  ipcMain.on("event:OpentAuthWindow", (event, args) => {
+    AuthWindow();
+    console.log(args);
+  });
