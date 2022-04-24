@@ -25,5 +25,7 @@ contextBridge.exposeInMainWorld('electron', {
         ipcRenderer.once(channel, (_event, ...args) => func(...args));
       }
     },
+    OpenAuthWindow: (msg: string) =>
+      ipcRenderer.send('event:OpentAuthWindow', msg),
   },
 });
