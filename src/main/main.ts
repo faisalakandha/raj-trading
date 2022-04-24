@@ -142,10 +142,10 @@ app
   })
   .catch(console.log);
 
-  ipcMain.handle("event:OpentAuthWindow", (event, args) => {
-    const state = AuthWindow();
-    const checkToken = store.get('access_token');
-    //console.log("CHECKTOKEN TEST :" + checkToken);
+ipcMain.handle("event:OpentAuthWindow", (event, args) => {
+  const state = AuthWindow();
+  const checkToken = store.get('access_token');
+  //console.log("CHECKTOKEN TEST :" + checkToken);
 
-    return state;
-  });
+  return true;
+});
