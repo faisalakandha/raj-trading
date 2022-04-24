@@ -5,6 +5,7 @@ import Positions from './Views/Positions/Positions';
 import PAndL from './Views/P&L/PAndL';
 import { extendTheme, ChakraProvider, Box } from '@chakra-ui/react';
 import LoginPage from './Views/LoginPage/LoginPage';
+import { useState } from 'react';
 
 const colors = {
   brand: {
@@ -169,11 +170,19 @@ const Home = () => {
 };
 
 export default function App() {
+
+  const [login, setLogin] = useState(false);
+
   return (
     <ChakraProvider theme={theme}>
       <Router>
         <Routes>
-          <Route path="/" element={<LoginPage />} />
+          {
+            login === false ?
+              <Route path="/" element={<LoginPage login={login} setLogin={setLogin} />} />
+              :
+              <Route path="/" element={<Home />} />
+          }
         </Routes>
       </Router>
     </ChakraProvider>
