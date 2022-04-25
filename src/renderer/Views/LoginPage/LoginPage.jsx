@@ -24,7 +24,7 @@ const LoginPage = ({ login, setLogin }) => {
                             title: 'Login Success!',
                             description: "Welcome.",
                             status: 'success',
-                            duration: 2000,
+                            duration: 3000,
                             isClosable: true,
                         })
                         setLogin(true);
@@ -34,7 +34,7 @@ const LoginPage = ({ login, setLogin }) => {
                             title: 'Login failed!',
                             description: "Try Again.",
                             status: 'error',
-                            duration: 9000,
+                            duration: 3000,
                             isClosable: true,
                         })
                         setLogin(false);
@@ -44,7 +44,7 @@ const LoginPage = ({ login, setLogin }) => {
                             title: 'Login failed!',
                             description: "Try Again.",
                             status: 'error',
-                            duration: 9000,
+                            duration: 3000,
                             isClosable: true,
                         })
                         setLogin(false);
