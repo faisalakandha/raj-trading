@@ -15,9 +15,23 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-const Store = require('electron-store');
+const myElectron = require("electron");
 
-const store = new Store();
+const mongoose = require('mongoose');
+
+const mongoUri =
+  'mongodb+srv://faisalakandha:faisalakandha123@cluster0.cd8qa.mongodb.net/rajTrading?retryWrites=true&w=majority';
+
+mongoose
+  .connect(mongoUri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log('Oauth DB Connected Successfully');
+  });
+
+const AuthSession = mongoose.model('session');
 
 require('../backend/index');
 
@@ -75,10 +89,12 @@ const createWindow = async () => {
     return path.join(RESOURCES_PATH, ...paths);
   };
 
+  const { width, height } = myElectron.screen.getPrimaryDisplay().workAreaSize;
+
   mainWindow = new BrowserWindow({
     show: false,
-    width: 1024,
-    height: 728,
+    width,
+    height,
     icon: getAssetPath('icon.png'),
     webPreferences: {
       preload: app.isPackaged
@@ -132,8 +148,16 @@ app.on('window-all-closed', () => {
 
 app
   .whenReady()
-  .then(() => {
+  .then(async () => {
+    try {
+      await AuthSession.deleteMany();
+      console.log('Auth Data successfully deleted');
+    } catch (err) {
+      console.log(err);
+    }
+
     createWindow();
+    mainWindow?.maximize();
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the
       // dock icon is clicked and there are no other windows open.
@@ -142,10 +166,17 @@ app
   })
   .catch(console.log);
 
-ipcMain.handle("event:OpentAuthWindow", (event, args) => {
-  const state = AuthWindow();
-  const checkToken = store.get('access_token');
-  //console.log("CHECKTOKEN TEST :" + checkToken);
-
-  return true;
+ipcMain.handle('event:OpentAuthWindow', async (event, args) => {
+  return new Promise(async (resolve, reject) => {
+    await AuthWindow()
+      .then(async (result) => {
+        if (result == true) {
+          resolve(true);
+        } else {
+          resolve(false);
+          reject('AUTHENTICATION FAILED !');
+        }
+      })
+      .catch('Auth Failure Catch');
+  });
 });
