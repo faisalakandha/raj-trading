@@ -4,11 +4,6 @@ import backroundImage from '../../../../assets/img/background.png';
 
 import './LoginPage.css';
 
-const fyers = require('fyers-api-v2');
-
-fyers.setAppId('FMR00CRGAK-100');
-fyers.setRedirectUrl('http://localhost:3000/');
-
 const LoginPage = ({ login, setLogin }) => {
 
     const toast = useToast();

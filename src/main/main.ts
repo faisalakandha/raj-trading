@@ -19,8 +19,12 @@ const myElectron = require("electron");
 
 const mongoose = require('mongoose');
 
-const mongoUri =
-  'mongodb+srv://faisalakandha:faisalakandha123@cluster0.cd8qa.mongodb.net/rajTrading?retryWrites=true&w=majority';
+const fs = require('fs'),
+const  nconf = require('nconf');
+
+nconf.argv().env().file({ file: 'appconfig.json' });
+
+const mongoUri = nconf.get("dbInfo:dburi");
 
 mongoose
   .connect(mongoUri, {

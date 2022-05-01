@@ -1,0 +1,14 @@
+{
+  "dbInfo":
+    {
+        "host":"cluster0.cd8qa.mongodb.net",
+        "database":"rajTrading",
+        "username":"faisalakandha",
+        "password":"faisalakandha123",
+        "port":"",
+        "dburi":"mongodb+srv://faisalakandha:faisalakandha123@cluster0.cd8qa.mongodb.net/rajTrading?retryWrites=true&w=majority"
+    },
+    "serverInfo":{
+        "port": 5000
+    }
+}
