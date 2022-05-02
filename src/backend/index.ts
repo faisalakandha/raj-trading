@@ -1,34 +1,25 @@
-//import Fyers from '../api/fypers-api';
 const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+
 const app = express();
-const mongoose = require('mongoose');
-require('../api/fypers-api');
-var fs = require('fs'),
-  nconf = require('nconf');
-
-nconf.argv().env().file({ file: 'appconfig.json' });
-
-
-const mongoUri = nconf.get('dbInfo:dburi');
-
-mongoose.connect(mongoUri,{
-    useNewUrlParser:true,
-    useUnifiedTopology:true,
-}).then(()=>{
-    console.log("DB Connected Successfully");
+const corsOptions = {
+  origin: 'http://localhost:8081',
+};
+app.use(cors(corsOptions));
+// parse requests of content-type - application/json
+app.use(bodyParser.json());
+// parse requests of content-type - application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: true }));
+// simple route
+app.get('/test', (req, res) => {
+  res.json({ message: 'Welcome to test endpoint.' });
 });
 
-console.log(nconf.get('dbInfo:database'));
-const port = 3000 || nconf.get("serverInfo:port");
-
-app.get('/', (req, res) => {
-  res.json({ message: 'alive' });
-});
-
-//var fyer = new Fyers('client','secret','password','app','rdr');
-
-//var fApi = new FyersApi('XS29344','http://localhost/seller/settings/shop-settings');
-
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+// Routes
+require('./routes/routes')(app);
+// set port, listen for requests
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}.`);
 });

@@ -10,5 +10,9 @@
     },
     "serverInfo":{
         "port": 5000
+    },
+    "fyersInfo":{
+      "fyId": "FMR00CRGAK-100",
+      "fyUri":"http://localhost:3000/"
     }
 }

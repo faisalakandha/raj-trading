@@ -16,26 +16,19 @@ import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 const myElectron = require("electron");
+import db from '../backend/models/index';
 
-const mongoose = require('mongoose');
 
-const fs = require('fs'),
-const  nconf = require('nconf');
-
-nconf.argv().env().file({ file: 'appconfig.json' });
-
-const mongoUri = nconf.get("dbInfo:dburi");
-
-mongoose
-  .connect(mongoUri, {
+db.mongoose
+  .connect(db.url, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
   .then(() => {
-    console.log('Oauth DB Connected Successfully');
+    console.log('Main DB Connected Successfully');
   });
 
-const AuthSession = mongoose.model('session');
+const AuthSession = db.mongoose.model('session');
 
 require('../backend/index');
 
@@ -181,6 +174,6 @@ ipcMain.handle('event:OpentAuthWindow', async (event, args) => {
           reject('AUTHENTICATION FAILED !');
         }
       })
-      .catch('Auth Failure Catch');
+      .catch('Auth Failure Error');
   });
 });

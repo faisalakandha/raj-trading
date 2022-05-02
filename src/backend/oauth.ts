@@ -1,18 +1,11 @@
 import { BrowserWindow } from 'electron';
 
-const fyers = require('fyers-api-v2');
+import fy from '../api/index';
 
-const mongoose = require('mongoose');
+import db from '../backend/models/index';
 
-const fs = require('fs'),
-const  nconf = require('nconf');
-
-nconf.argv().env().file({ file: 'appconfig.json' });
-
-const mongoUri = nconf.get("dbInfo:dburi");
-
-mongoose
-  .connect(mongoUri, {
+db.mongoose
+  .connect(db.url, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -20,15 +13,9 @@ mongoose
     console.log('Oauth DB Connected Successfully');
   });
 
-const loginSchema = new mongoose.Schema({
-  status: String,
-  access: String,
-});
 
-const Session = mongoose.model('session', loginSchema);
-
-fyers.setAppId('FMR00CRGAK-100');
-fyers.setRedirectUrl('http://localhost:3000/');
+fy.fyers.setAppId(fy.fyId);
+fy.fyers.setRedirectUrl(fy.url);
 
 export default async function AuthWindow() {
   const authUrl =
@@ -56,7 +43,7 @@ export default async function AuthWindow() {
         secret_key: 'DCMSA80T3E',
       };
 
-      fyers
+      fy.fyers
         .generate_access_token(reqBody)
         .then((response) => {
           return response;
@@ -68,7 +55,7 @@ export default async function AuthWindow() {
 
         .then((AuthToken) => {
           if (AuthToken.s === 'ok') {
-            const login = new Session({
+            const login = new db.Session({
               status: AuthToken.s,
               access: AuthToken.access_token,
             });
