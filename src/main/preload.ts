@@ -27,5 +27,8 @@ contextBridge.exposeInMainWorld('electron', {
     },
     OpenAuthWindow: (msg: string) =>
       ipcRenderer.invoke('event:OpentAuthWindow', msg),
+
+    GetAuthToken: (query: string) =>
+      ipcRenderer.invoke('event:GetAuthToken', query),
   },
 });

@@ -177,3 +177,8 @@ ipcMain.handle('event:OpentAuthWindow', async (event, args) => {
       .catch('Auth Failure Error');
   });
 });
+
+ipcMain.on('event:GetAuthToken', (event, arg) => {
+  console.log(arg);
+  event.returnValue = 'pong';
+});
