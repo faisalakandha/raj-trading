@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Input, Button, Heading, Stack, Tooltip, useDisclosure, Box, ScaleFade, Text } from '@chakra-ui/react';
 import TradeOrderBox from '../OrderBox/TradeOrderBox';
+import axios from 'axios';
 
 const Watchlist = () => {
+    const [rawWatclistData, setRawWatchlistData] = useState([]);
     const [watclistData, setWatchlistData] = useState([]);
     const [savedTrade, setSavedTrade] = useState([]);
     const [multiSavedTrade, setMultiSavedTrade] = useState([]);
@@ -15,97 +17,84 @@ const Watchlist = () => {
     });
     const { isOpen, onOpen, onClose } = useDisclosure();
 
+
     const fakeWatchListData = [
+        // {
+        //     id: '1',
+        //     name: 'Sample1',
+        //     tag: 'sq',
+        //     price: '20',
+        //     percentage: '10',
+        // },
+
         {
-            id: '1',
-            name: 'Sample1',
-            tag: 'sq',
-            price: '20',
-            percentage: '10',
+            "_id": "626ce9114c3c339be75f907e",
+            "scode": 539437,
+            "name": "IDFC FIRST BANK LIMITED",
+            "acode": "IDBL"
         },
         {
-            id: '2',
-            name: 'Test2',
-            tag: 'ss',
-            price: '30',
-            percentage: '20',
+            "_id": "626ce9114c3c339be75f907b",
+            "scode": 539957,
+            "name": "Mahanagar Gas Limited",
+            "acode": "MNGL"
         },
         {
-            id: '3',
-            name: 'Beta3',
-            tag: 's1s',
-            price: '40',
-            percentage: '15',
+            "_id": "626ce9114c3c339be75f907c",
+            "scode": 540065,
+            "name": "RBL Bank Limited",
+            "acode": "RBLB"
         },
         {
-            id: '4',
-            name: 'Alpha4',
-            tag: 'pp',
-            price: '50',
-            percentage: '18',
+            "_id": "626ce9114c3c339be75f9082",
+            "scode": 535789,
+            "name": "INDIABULLS HOUSING FINANCE LIMITED",
+            "acode": "IBHF"
         },
         {
-            id: '5',
-            name: 'Sample5',
-            tag: 'ra',
-            price: '60',
-            percentage: '40',
+            "_id": "626ce9114c3c339be75f9083",
+            "scode": 507685,
+            "name": "WIPRO LTD.",
+            "acode": "WIPR"
         },
         {
-            id: '6',
-            name: 'Sample5',
-            tag: 'ra',
-            price: '60',
-            percentage: '40',
-        },
-        {
-            id: '7',
-            name: 'Sample5',
-            tag: 'ra',
-            price: '60',
-            percentage: '40',
-        },
-        {
-            id: '8',
-            name: 'Sample5',
-            tag: 'ra',
-            price: '60',
-            percentage: '40',
-        },
-        {
-            id: '9',
-            name: 'Sample5',
-            tag: 'ra',
-            price: '60',
-            percentage: '40',
-        },
-        {
-            id: '10',
-            name: 'Sample5',
-            tag: 'ra',
-            price: '60',
-            percentage: '40',
-        },
-        {
-            id: '11',
-            name: 'Sample5',
-            tag: 'ra',
-            price: '60',
-            percentage: '40',
-        },
-        {
-            id: '12',
-            name: 'Sample5',
-            tag: 'ra',
-            price: '60',
-            percentage: '40',
+            "_id": "626ce9114c3c339be75f9088",
+            "scode": 500300,
+            "name": "GRASIM INDUS",
+            "acode": "GRSM"
         },
     ];
+
+    useEffect(() => {
+        axios.get('http://localhost:8080/api/get-instruments')
+            .then(function (response) {
+                console.log(response.data);
+                setRawWatchlistData(response.data);
+            })
+            .catch(function (error) {
+                if (error.response) {
+                    // The request was made and the server responded with a status code
+                    // that falls out of the range of 2xx
+                    console.log(error.response.data);
+                    console.log(error.response.status);
+                    console.log(error.response.headers);
+                } else if (error.request) {
+                    // The request was made but no response was received
+                    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                    // http.ClientRequest in node.js
+                    console.log(error.request);
+                } else {
+                    // Something happened in setting up the request that triggered an Error
+                    console.log('Error', error.message);
+                }
+                console.log(error.config);
+            });
+    }, [])
 
     function containsObject(obj, list) {
         var i;
         for (i = 0; i < list.length; i++) {
-            if (list[i].id === obj.id) {
+            if (list[i]._id === obj._id) {
                 return true;
             }
         }
@@ -130,7 +119,7 @@ const Watchlist = () => {
         console.log(e.target.id);
         if (e.target.localName === "div" && e.target.id === 'mainDiv') {
             setNotFocused({ display: 'block' });
-            const result = mergeArrayOfObjects(savedTrade, multiSavedTrade, 'id');
+            const result = mergeArrayOfObjects(savedTrade, multiSavedTrade, '_id');
             console.log(result);
             if (result !== 0) {
                 setSavedTrade(result);
@@ -161,8 +150,8 @@ const Watchlist = () => {
     }
 
     const handleDeleteBtn = (id) => {
-        const updatedSavedTrade = savedTrade.filter((item => item.id !== id));
-        const updatedMultiSavedTrade = multiSavedTrade.filter((item => item.id !== id))
+        const updatedSavedTrade = savedTrade.filter((item => item._id !== id));
+        const updatedMultiSavedTrade = multiSavedTrade.filter((item => item._id !== id))
         setSavedTrade(updatedSavedTrade);
         setMultiSavedTrade(updatedMultiSavedTrade);
     }
@@ -179,6 +168,10 @@ const Watchlist = () => {
 
     const handleSearch = (e) => {
         let value = '';
+        if (e.target.value.length < 3) {
+            setWatchlistData([]);
+            return;
+        }
         // value = (typeof (e.target.value.toLowerCase()) !== undefined) ? value : '';
 
         var regex = new RegExp("^[a-zA-Z0-9 ]+$");
@@ -188,11 +181,17 @@ const Watchlist = () => {
 
         console.log(value);
         let result = [];
-        result = fakeWatchListData.filter((data) => {
+        result = rawWatclistData.filter((data) => {
             //console.log(data.name.toLowerCase().search(value) != -1);
-            return data.name.toLowerCase().indexOf(value) != -1;
+            return data.acode.toLowerCase().indexOf(value) != -1;
         });
-        //console.log('result', result);
+        if (result.length === 0) {
+            result = rawWatclistData.filter((data) => {
+                //console.log(data.name.toLowerCase().search(value) != -1);
+                return data.name.toLowerCase().indexOf(value) != -1;
+            });
+        }
+        console.log('result', result);
         if (value.length !== 0) {
             setWatchlistData(result);
         }
@@ -227,11 +226,11 @@ const Watchlist = () => {
                     watclistData.length !== 0 ?
 
                         watclistData.map(singleData =>
-                            <Box key={singleData.id} style={{ width: '98%', display: 'flex', justifyContent: 'space-evenly', flexDirection: 'column', alignItems: 'center' }}
+                            <Box key={singleData._id} style={{ width: '98%', display: 'flex', justifyContent: 'space-evenly', flexDirection: 'column', alignItems: 'center' }}
 
                                 boxShadow={'0 7px 30px -10px rgba(150,170,180,0.5)'} bgColor={'skyBlue.100'} color={'black'} p='10px' mt='10px' maxW='md' borderWidth='0px' borderRadius='lg'
 
-                                onMouseEnter={() => setIsShown(singleData.id)}
+                                onMouseEnter={() => setIsShown(singleData._id)}
                                 onMouseLeave={() => setIsShown(null)}
                             >
                                 <Tooltip label='Click To Add' placement='right'>
@@ -241,14 +240,14 @@ const Watchlist = () => {
                                         boxShadow={' rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px'}
                                         p='10px' mt='10px' mb='10px' borderWidth='0px' borderRadius='md'
                                     >
-                                        <div style={{ marginRight: '5px' }}>{singleData.name}</div>
-                                        <div style={{ marginRight: '5px' }}>{singleData.id}</div>
-                                        <div>{singleData.price}</div>
+                                        <div style={{ marginRight: '5px' }}>Name: {singleData.name}</div>
+                                        <div style={{ marginRight: '5px' }}>S-Code: {singleData.scode}</div>
+                                        <div>A-Code: {singleData.acode}</div>
                                     </Box>
                                 </Tooltip>
 
                                 {
-                                    isShown === singleData.id && (
+                                    isShown === singleData._id && (
                                         <ScaleFade initialScale={0.9} in={isShown}>
                                             <Stack spacing={1} direction={['column', 'row']} align='center' style={{ zIndex: '100' }}>
                                                 <Button colorScheme='blue' size='sm' onClick={() => handleBuySellClicked(singleData, 'B')}>B</Button>
@@ -299,7 +298,7 @@ const Watchlist = () => {
                     savedTrade.length !== 0 ?
 
                         savedTrade.map(singleData =>
-                            <Box w='98%' key={singleData.id} style={notFocused} onMouseEnter={() => setIsShown2(singleData.id)}
+                            <Box w='98%' key={singleData._id} style={notFocused} onMouseEnter={() => setIsShown2(singleData._id)}
                                 onMouseLeave={() => setIsShown2(null)}
 
                             >
@@ -312,18 +311,21 @@ const Watchlist = () => {
                                         boxShadow={' rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px'}
                                         p='10px' mt='10px' mb='10px' borderWidth='0px' borderRadius='md'
                                     >
-                                        <p>{singleData.tag}</p>
-                                        <p>{singleData.percentage}</p>
+                                        {/* <p>{singleData.name}</p>
+                                        <p>{singleData.percentage}</p> */}
+                                        <div style={{ marginRight: '5px' }}>Name: {singleData.name}</div>
+                                        <div style={{ marginRight: '5px' }}>S-Code: {singleData.scode}</div>
+                                        <div>A-Code: {singleData.acode}</div>
                                     </Box>
                                     {
-                                        isShown2 === singleData.id &&
+                                        isShown2 === singleData._id &&
                                         <ScaleFade initialScale={0.9} in={isShown2}>
                                             <Stack spacing={1} direction={['column', 'row']} align='center'>
                                                 <Button colorScheme='blue' size='sm' onClick={() => handleBuySellClicked(singleData, 'B')}>B</Button>
                                                 <Button onClick={() => handleBuySellClicked(singleData, 'S')} bg='orange.300' color='white' size='sm' _hover={{ bg: 'orange.400' }}>S</Button>
                                                 <Button size='sm'>{'->'}</Button>
                                                 <Button size='sm'>=</Button>
-                                                <Button size='sm' colorScheme='red' variant='solid' onClick={() => handleDeleteBtn(singleData.id)}>-</Button>
+                                                <Button size='sm' colorScheme='red' variant='solid' onClick={() => handleDeleteBtn(singleData._id)}>-</Button>
                                             </Stack>
                                         </ScaleFade>
                                     }

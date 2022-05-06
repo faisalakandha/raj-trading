@@ -3,7 +3,7 @@ import './App.css';
 import Watchlist from './Views/Watchlist/Watchlist';
 import Positions from './Views/Positions/Positions';
 import PAndL from './Views/P&L/PAndL';
-import { extendTheme, ChakraProvider, Box } from '@chakra-ui/react';
+import { extendTheme, ChakraProvider, Box, Spinner, Center } from '@chakra-ui/react';
 import LoginPage from './Views/LoginPage/LoginPage';
 import { useEffect, useState } from 'react';
 
@@ -149,25 +149,32 @@ const theme = extendTheme({ colors })
 
 const Home = () => {
 
-
+  const [loading, setLoading] = useState(true);
 
   return (
     <div className="App">
-      <Box>
-        <div className="AppContainer">
-          <Box bgColor={'white'} className="LeftView">
-            <Watchlist />
+      {
+        loading ?
+          <Center h='100vh'>
+            <Spinner size='xl' />
+          </Center>
+          :
+          <Box>
+            <div className="AppContainer">
+              <Box bgColor={'white'} className="LeftView">
+                <Watchlist />
+              </Box>
+              <div className="RightView">
+                <Box bgColor={'white'} className="Positions">
+                  <Positions />
+                </Box>
+                <Box bgColor={'white'} className="PandL">
+                  <PAndL />
+                </Box>
+              </div>
+            </div>
           </Box>
-          <div className="RightView">
-            <Box bgColor={'white'} className="Positions">
-              <Positions />
-            </Box>
-            <Box bgColor={'white'} className="PandL">
-              <PAndL />
-            </Box>
-          </div>
-        </div>
-      </Box>
+      }
     </div>
   );
 };
