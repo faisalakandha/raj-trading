@@ -13,6 +13,7 @@
     },
     "fyersInfo":{
       "fyId": "FMR00CRGAK-100",
-      "fyUri":"http://localhost:3000/"
+      "fyUri":"http://localhost:3000/",
+      "authUri":"https://api.fyers.in/api/v2/generate-authcode?client_id=FMR00CRGAK-100&redirect_uri=http://localhost:3000/&response_type=code&state=sample_state"
     }
 }
