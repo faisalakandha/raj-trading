@@ -6,14 +6,15 @@ const app = express();
 const corsOptions = {
   origin: 'http://localhost:8081',
 };
+app.use(express.json());
 app.use(cors(corsOptions));
 // parse requests of content-type - application/json
 app.use(bodyParser.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 // simple route
-app.get('/test', (req, res) => {
-  res.json({ message: 'Welcome to test endpoint.' });
+app.get('/test', async (req, res) => {
+ res.send("This is a test endpoint !");
 });
 
 // Routes
