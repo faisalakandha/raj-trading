@@ -6,6 +6,7 @@ import PAndL from './Views/P&L/PAndL';
 import { extendTheme, ChakraProvider, Box, Spinner, Center } from '@chakra-ui/react';
 import LoginPage from './Views/LoginPage/LoginPage';
 import { useEffect, useState } from 'react';
+import Orders from './Views/Orders/Orders';
 
 const colors = {
   brand: {
@@ -165,12 +166,19 @@ const Home = () => {
                 <Watchlist />
               </Box>
               <div className="RightView">
-                <Box bgColor={'white'} className="Positions">
-                  <Positions />
-                </Box>
-                <Box bgColor={'white'} className="PandL">
-                  <PAndL />
-                </Box>
+                <div className="TopRightView">
+                  <Box bgColor={'white'} className="Positions">
+                    <Positions />
+                  </Box>
+                  <Box bgColor={'white'} className="PandL">
+                    <PAndL />
+                  </Box>
+                </div>
+                <div className="BottomRightView">
+                  <Box bgColor={'white'} className="Orders">
+                    <Orders />
+                  </Box>
+                </div>
               </div>
             </div>
           </Box>
