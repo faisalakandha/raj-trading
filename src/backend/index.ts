@@ -1,11 +1,20 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-
 const app = express();
-const corsOptions = {
-  origin: 'http://localhost:8080',
-};
+
+var whitelist = ['http://localhost:8080/', 'http://localhost:1212']
+
+var corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}
+
 app.use(cors());
 app.use(express.json());
 app.use(cors(corsOptions));
@@ -15,7 +24,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 // simple route
 app.get('/test', async (req, res) => {
- res.send("This is a test endpoint !");
+  res.send("This is a test endpoint !");
 });
 
 // Routes
