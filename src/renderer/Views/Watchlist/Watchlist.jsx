@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Input, Button, Heading, Stack, Tooltip, useDisclosure, Box, ScaleFade, Text } from '@chakra-ui/react';
+import { Input, Button, Heading, Stack, Tooltip, useDisclosure, Box, ScaleFade, Text, Spinner, Center } from '@chakra-ui/react';
 import TradeOrderBox from '../OrderBox/TradeOrderBox';
 import axios from 'axios';
 
@@ -16,6 +16,7 @@ const Watchlist = () => {
         data: []
     });
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const [loading, setLoading] = useState(false);
 
 
     const fakeWatchListData = [
