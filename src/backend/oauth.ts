@@ -4,6 +4,12 @@ import fy from '../api/index';
 
 import db from '../backend/models/index';
 
+const  nconf = require('nconf');
+
+nconf.argv().env().file({ file: 'appconfig.json' });
+
+const authUri = nconf.get("fyersInfo:authUri");
+
 db.mongoose
   .connect(db.url, {
     useNewUrlParser: true,
@@ -18,8 +24,7 @@ fy.fyers.setAppId(fy.fyId);
 fy.fyers.setRedirectUrl(fy.url);
 
 export default async function AuthWindow() {
-  const authUrl =
-    'https://api.fyers.in/api/v2/generate-authcode?client_id=FMR00CRGAK-100&redirect_uri=http://localhost:3000/&response_type=code&state=sample_state';
+  const authUrl = authUri;
 
   const authWindow = new BrowserWindow({
     width: 800,

@@ -2,6 +2,7 @@ declare global {
   interface Window {
     electron: {
       ipcRenderer: {
+        GetAuthToken(query: string): void;
         OpenAuthWindow(msg: string): void;
         myPing(): void;
         on(
