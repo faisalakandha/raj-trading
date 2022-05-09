@@ -149,7 +149,7 @@ const theme = extendTheme({ colors })
 
 const Home = () => {
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   return (
     <div className="App">
