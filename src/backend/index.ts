@@ -23,6 +23,7 @@ app.use(bodyParser.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 // simple route
+
 app.get('/test', async (req, res) => {
   res.send("This is a test endpoint !");
 });
