@@ -150,8 +150,11 @@ const theme = extendTheme({ colors })
 
 const Home = () => {
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(true);
+
+
+
 
   window.electron.ipcRenderer.DbChange((_event, value) => {
     setResult(false);

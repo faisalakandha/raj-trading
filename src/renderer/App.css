@@ -45,6 +45,7 @@ div::-webkit-scrollbar-thumb {
 }
 
 .TopRightView {
+  width: 100%;
   height: 60%;
 }
 
@@ -63,13 +64,11 @@ div::-webkit-scrollbar-thumb {
   padding: 5px;
   box-shadow: 0 7px 30px -10px rgba(53, 163, 218, 0.5);
   border-radius: 10px;
-  height: 100%;
-  margin-bottom: 15px;
-  padding-bottom: 15px;
+  margin-bottom: 20px;
+  padding-bottom: 5px;
 }
 
 .Positions {
-  width: 100%;
   box-sizing: border-box;
   height: 100%;
   /* border: 2px solid cadetblue; */
@@ -79,6 +78,8 @@ div::-webkit-scrollbar-thumb {
   padding: 5px;
   box-shadow: 0 7px 30px -10px rgba(53, 163, 218, 0.5);
   border-radius: 10px;
+  padding-right: 10px;
+  margin-right: 10px;
 }
 
 .PandL {
@@ -91,6 +92,8 @@ div::-webkit-scrollbar-thumb {
   padding: 5px;
   box-shadow: 0 7px 30px -10px rgba(53, 163, 218, 0.5);
   border-radius: 10px;
+  margin-bottom: 20px;
+  padding-bottom: 5px;
 }
 
 
