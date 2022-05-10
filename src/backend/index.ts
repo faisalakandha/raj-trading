@@ -3,21 +3,9 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express();
 
-var whitelist = ['http://localhost:8080/', 'http://localhost:1212']
-
-var corsOptions = {
-  origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true)
-    } else {
-      callback(new Error('Not allowed by CORS'))
-    }
-  }
-}
 
 app.use(cors());
 app.use(express.json());
-app.use(cors(corsOptions));
 // parse requests of content-type - application/json
 app.use(bodyParser.json());
 // parse requests of content-type - application/x-www-form-urlencoded
