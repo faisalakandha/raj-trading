@@ -1,5 +1,5 @@
 import { Box, Heading, Text } from '@chakra-ui/react';
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 
 const Positions = () => {
 
