@@ -149,7 +149,18 @@ const theme = extendTheme({ colors })
 
 const Home = () => {
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [result, setResult] = useState(true);
+
+  window.electron.ipcRenderer.DbChange((_event, value) => {
+    setResult(false);
+    console.log("My Result is true !");
+  });
+
+  useEffect(() => {
+    if(result === false)
+    setLoading(result);
+  }, [result]);
 
   return (
     <div className="App">

@@ -30,5 +30,9 @@ contextBridge.exposeInMainWorld('electron', {
 
     GetAuthToken: (query: string) =>
       ipcRenderer.invoke('event:GetAuthToken', query),
+
+    DbChange: (
+      callback: (event: Electron.IpcRendererEvent, ...args: any[]) => void
+    ) => ipcRenderer.on('event:dbChange', callback),
   },
 });

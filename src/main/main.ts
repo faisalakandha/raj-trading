@@ -15,9 +15,8 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-const myElectron = require("electron");
+const myElectron = require('electron');
 import db from '../backend/models/index';
-
 
 db.mongoose
   .connect(db.url, {
@@ -97,6 +96,7 @@ const createWindow = async () => {
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')
         : path.join(__dirname, '../../.erb/dll/preload.js'),
+      nodeIntegration: true,
     },
   });
 
@@ -153,6 +153,11 @@ app
       console.log(err);
     }
 
+    db.Session.watch().on('change', (data) => {
+      console.log(data);
+      mainWindow.webContents.send('event:dbChange', 'DBChange');
+    });
+
     createWindow();
     mainWindow?.maximize();
     app.on('activate', () => {
@@ -178,7 +183,7 @@ ipcMain.handle('event:OpentAuthWindow', async (event, args) => {
   });
 });
 
-ipcMain.on('event:GetAuthToken', (event, arg) => {
+ipcMain.handle('event:GetAuthToken', (event, arg) => {
   console.log(arg);
-  event.returnValue = 'pong';
+  return arg;
 });
