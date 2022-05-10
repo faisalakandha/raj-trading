@@ -159,8 +159,8 @@ const Home = () => {
   });
 
   useEffect(() => {
-    if(result === false)
-    setLoading(result);
+    if (result === false)
+      setLoading(result);
   }, [result]);
 
   return (
@@ -181,13 +181,13 @@ const Home = () => {
                   <Box bgColor={'white'} className="Positions">
                     <Positions />
                   </Box>
-                  <Box bgColor={'white'} className="PandL">
-                    <PAndL />
-                  </Box>
                 </div>
                 <div className="BottomRightView">
                   <Box bgColor={'white'} className="Orders">
                     <Orders />
+                  </Box>
+                  <Box bgColor={'white'} className="PandL">
+                    <PAndL />
                   </Box>
                 </div>
               </div>

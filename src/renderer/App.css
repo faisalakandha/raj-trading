@@ -45,16 +45,16 @@ div::-webkit-scrollbar-thumb {
 }
 
 .TopRightView {
-  display: flex;
   height: 60%;
 }
 
 .BottomRightView {
-  width: 100%;
+  display: flex;
   height: 40%;
 }
 
 .Orders {
+  width: 60%;
   box-sizing: border-box;
   /* height: 40%; */
   /* border: 2px solid cadetblue; */
@@ -63,15 +63,15 @@ div::-webkit-scrollbar-thumb {
   padding: 5px;
   box-shadow: 0 7px 30px -10px rgba(53, 163, 218, 0.5);
   border-radius: 10px;
-  height: 95%;
+  height: 100%;
   margin-bottom: 15px;
   padding-bottom: 15px;
 }
 
 .Positions {
-  width: 67%;
+  width: 100%;
   box-sizing: border-box;
-  /* height: 60%; */
+  height: 100%;
   /* border: 2px solid cadetblue; */
   /* margin: 5px;
   margin-bottom: 0px; */
@@ -82,7 +82,7 @@ div::-webkit-scrollbar-thumb {
 }
 
 .PandL {
-  width: 33%;
+  width: 40%;
   box-sizing: border-box;
   /* height: 40%; */
   /* border: 2px solid cadetblue; */
