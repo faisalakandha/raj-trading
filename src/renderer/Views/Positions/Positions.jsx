@@ -164,8 +164,8 @@ const Positions = () => {
     const [positions, setPositions] = useState(fakePositionsData);
 
     return (
-        <div style={{ height: '-webkit-fill-available', overflow: 'auto' }}>
-            <Heading pt='10px' pb='5px' as='h1' size='sm'>Positions</Heading>
+        <div style={{ height: '-webkit-fill-available', overflow: 'auto', fontFamily: 'poppins' }}>
+            <Heading pt='10px' pb='5px' as='h1' size='sm' fontFamily='poppins'>Positions</Heading>
             <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                 {
                     positions && positions.map(singleData =>

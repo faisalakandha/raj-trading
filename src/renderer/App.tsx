@@ -150,7 +150,7 @@ const theme = extendTheme({ colors })
 
 const Home = () => {
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [result, setResult] = useState(true);
 
 
@@ -164,7 +164,7 @@ const Home = () => {
   useEffect(() => {
     if (result === false)
       setLoading(result);
-  }, [result]);
+  }, [result, setResult]);
 
   return (
     <div className="App">

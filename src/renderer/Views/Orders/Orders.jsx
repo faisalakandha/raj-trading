@@ -72,7 +72,7 @@ const Orders = () => {
 
     return (
         <div style={{ height: '-webkit-fill-available', overflow: 'auto' }}>
-            <Heading pt='10px' pb='5px' as='h1' size='sm'>Orders</Heading>
+            <Heading pt='10px' pb='5px' as='h1' size='sm' fontFamily='poppins'>Orders</Heading>
 
             <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                 {

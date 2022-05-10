@@ -57,7 +57,7 @@ const PAndL = () => {
 
     return (
         <div style={{ height: '-webkit-fill-available', overflow: 'auto' }}>
-            <Heading as='h1' size='sm'>P & L</Heading>
+            <Heading as='h1' size='sm' fontFamily='poppins'>P & L</Heading>
             <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                 {
                     profitAndLoss && profitAndLoss.map(singleData =>

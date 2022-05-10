@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Input, Button, Heading, Stack, Tooltip, useDisclosure, Box, ScaleFade, Text, Spinner, Center } from '@chakra-ui/react';
+import { Input, Button, Heading, Stack, Tooltip, useDisclosure, Box, ScaleFade, Text, Spinner, Center, useToast } from '@chakra-ui/react';
 import TradeOrderBox from '../OrderBox/TradeOrderBox';
 import axios from 'axios';
 
@@ -17,6 +17,8 @@ const Watchlist = () => {
     });
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [loading, setLoading] = useState(false);
+
+    const toast = useToast();
 
 
     const fakeWatchListData = [
@@ -103,7 +105,7 @@ const Watchlist = () => {
         return false;
     }
 
-    const mergeArrayOfObjects = (original, newdata, selector = 'id') => {
+    const mergeArrayOfObjects = (original, newdata, selector = '_id') => {
         newdata.forEach(dat => {
             const foundIndex = original.findIndex(ori => ori[selector] == dat[selector]);
             if (foundIndex >= 0) original.splice(foundIndex, 1, dat);
@@ -133,13 +135,33 @@ const Watchlist = () => {
     const handleAddBtn = (data) => {
 
         console.log(savedTrade);
-        if (!containsObject(data, savedTrade)) {
+
+        const result = mergeArrayOfObjects(savedTrade, multiSavedTrade, '_id');
+
+        if (!containsObject(data, result)) {
             //console.log(savedTrade.includes(data));
-            setSavedTrade([...savedTrade, data]);
+            console.log('My Bug: ', savedTrade);
+            setSavedTrade([...result, data]);
             //console.log(data);
             //console.log(savedTrade);
+            toast({
+                title: 'Trade Added To Watchlist',
+                description: "Success",
+                status: 'success',
+                duration: 1500,
+                isClosable: true,
+            })
             setWatchlistData([]);
             setNotFocused({ display: 'block' });
+        }
+        else {
+            toast({
+                title: 'Trade Already Exists',
+                description: "Information",
+                status: 'info',
+                duration: 1500,
+                isClosable: true,
+            })
         }
     }
 
@@ -147,6 +169,22 @@ const Watchlist = () => {
         setNotFocused({ display: 'none' });
         if (!containsObject(data, multiSavedTrade)) {
             setMultiSavedTrade([...multiSavedTrade, data]);
+            toast({
+                title: 'Trade Added To Watchlist',
+                description: "Success",
+                status: 'success',
+                duration: 1500,
+                isClosable: true,
+            })
+        }
+        else {
+            toast({
+                title: 'Trade Already Exists',
+                description: "Information",
+                status: 'info',
+                duration: 1500,
+                isClosable: true,
+            })
         }
     }
 
@@ -155,6 +193,13 @@ const Watchlist = () => {
         const updatedMultiSavedTrade = multiSavedTrade.filter((item => item._id !== id))
         setSavedTrade(updatedSavedTrade);
         setMultiSavedTrade(updatedMultiSavedTrade);
+        toast({
+            title: 'Trade Deleted From Watchlist',
+            description: "Deleted",
+            status: 'error',
+            duration: 1500,
+            isClosable: true,
+        })
     }
 
     // const handleWatchlistBlur = () => {
@@ -217,7 +262,7 @@ const Watchlist = () => {
 
     return (
         <div style={{ height: '-webkit-fill-available', overflow: 'auto' }} >
-            <Heading pt='10px' pb='15px' as='h1' size='sm'>Watchlist</Heading>
+            <Heading pt='10px' pb='15px' as='h1' size='sm' fontFamily='poppins'>Watchlist</Heading>
             <Tooltip label='Search Trades' placement='right'>
                 <Input style={{ padding: '15px 10px', width: '90%' }} size='md' type="text" variant='filled' placeholder='Search Bar' name="watchlist-search" id="watchlist-search" onChange={(e) => handleSearch(e)} onFocus={() => setNotFocused({ display: 'none' })} />
             </Tooltip>
@@ -227,9 +272,9 @@ const Watchlist = () => {
                     watclistData.length !== 0 ?
 
                         watclistData.map(singleData =>
-                            <Box key={singleData._id} style={{ width: '98%', display: 'flex', justifyContent: 'space-evenly', flexDirection: 'column', alignItems: 'center' }}
+                            <Box key={singleData._id} style={{ width: '98%', display: 'flex', justifyContent: 'space-evenly', flexDirection: 'column', alignItems: 'center' }} className='watch-list-card'
 
-                                boxShadow={'0 7px 30px -10px rgba(150,170,180,0.5)'} bgColor={'skyBlue.100'} color={'black'} p='10px' mt='10px' maxW='md' borderWidth='0px' borderRadius='lg'
+                                p='10px' mt='10px' maxW='md' borderWidth='0px' borderRadius='lg'
 
                                 onMouseEnter={() => setIsShown(singleData._id)}
                                 onMouseLeave={() => setIsShown(null)}
@@ -241,15 +286,27 @@ const Watchlist = () => {
                                         boxShadow={' rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px'}
                                         p='10px' mt='10px' mb='10px' borderWidth='0px' borderRadius='md'
                                     >
-                                        <div style={{ marginRight: '5px' }}>Name: {singleData.name}</div>
-                                        <div style={{ marginRight: '5px' }}>S-Code: {singleData.scode}</div>
-                                        <div>A-Code: {singleData.acode}</div>
+                                        <div style={{ marginRight: '10px', width: '55%', textAlign: 'left' }}>
+                                            <Tooltip label='Name' placement='top'>
+                                                <Text fontSize='sm' >{singleData.name}</Text>
+                                            </Tooltip>
+                                        </div>
+                                        <div style={{ marginRight: '10px', width: '25%' }}>
+                                            <Tooltip label='S-Code' placement='top'>
+                                                <Text fontSize='sm' >{singleData.scode}</Text>
+                                            </Tooltip>
+                                        </div>
+                                        <div style={{ width: '20%' }}>
+                                            <Tooltip label='A-code' placement='top'>
+                                                <Text fontSize='sm' >{singleData.acode}</Text>
+                                            </Tooltip>
+                                        </div>
                                     </Box>
                                 </Tooltip>
 
                                 {
                                     isShown === singleData._id && (
-                                        <ScaleFade initialScale={0.9} in={isShown}>
+                                        <ScaleFade unmountOnExit={true} reverse initialScale={0.95} in={isShown}>
                                             <Stack spacing={1} direction={['column', 'row']} align='center' style={{ zIndex: '100' }}>
                                                 <Button colorScheme='blue' size='sm' onClick={() => handleBuySellClicked(singleData, 'B')}>B</Button>
                                                 <Button onClick={() => handleBuySellClicked(singleData, 'S')} bg='orange.300' color='white' size='sm' _hover={{ bg: 'orange.400' }}>S</Button>
@@ -307,16 +364,28 @@ const Watchlist = () => {
 
                                     boxShadow={'0 7px 30px -10px rgba(150,170,180,0.5)'} bgColor={'blue.200'} color={'black'} p='10px' mt='10px' borderWidth='0px' borderRadius='lg'
                                 >
-                                    <Box style={{ width: '100%', display: 'flex', justifyContent: 'space-evenly', marginRight: '5px' }}
+                                    <Box style={{ width: '100%', display: 'flex', justifyContent: 'space-evenly', marginRight: '5px', cursor: 'default' }}
                                         bg='whiteAlpha.900'
                                         boxShadow={' rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px'}
                                         p='10px' mt='10px' mb='10px' borderWidth='0px' borderRadius='md'
                                     >
                                         {/* <p>{singleData.name}</p>
                                         <p>{singleData.percentage}</p> */}
-                                        <div style={{ marginRight: '5px' }}>Name: {singleData.name}</div>
-                                        <div style={{ marginRight: '5px' }}>S-Code: {singleData.scode}</div>
-                                        <div>A-Code: {singleData.acode}</div>
+                                        <div style={{ marginRight: '10px', width: '55%', textAlign: 'left' }}>
+                                            <Tooltip label='Name' placement='top'>
+                                                <Text fontSize='sm' >{singleData.name}</Text>
+                                            </Tooltip>
+                                        </div>
+                                        <div style={{ marginRight: '10px', width: '25%' }}>
+                                            <Tooltip label='S-Code' placement='top'>
+                                                <Text fontSize='sm' >{singleData.scode}</Text>
+                                            </Tooltip>
+                                        </div>
+                                        <div style={{ width: '20%' }}>
+                                            <Tooltip label='A-code' placement='top'>
+                                                <Text fontSize='sm' >{singleData.acode}</Text>
+                                            </Tooltip>
+                                        </div>
                                     </Box>
                                     {
                                         isShown2 === singleData._id &&
