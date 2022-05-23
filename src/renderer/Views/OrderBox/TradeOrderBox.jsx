@@ -39,37 +39,36 @@ const TradeOrderBox = ({ buyClicked, setBuyClicked, isOpen, onOpen, onClose }) =
     }
 
     return (
-        <div>
-            <Modal isOpen={isOpen} onClose={onClose} size='xl'>
-                <ModalOverlay />
-                <ModalContent>
-                    <ModalHeader bg={buyClicked.status ? 'blue.300' : 'orange.300'} color='white'>
-                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <div>
-                                <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-                                    <Heading as='h3' size='sm'>{buyClicked.status ? 'Buy' : 'Sell'}</Heading>
-                                    <Heading as='h3' size='sm' ml='15px'>IEX</Heading>
-                                    <Text fontSize='xs' ml='5px' textAlign='start' >NSE</Text>
-                                    {/* <CloseIcon /> */}
-                                    <SmallCloseIcon />
-                                    <Heading as='h3' size='sm'>10 Qty</Heading>
-                                </div>
-                                <div style={{ display: 'flex' }}>
-                                    <Text fontSize='sm' >BSE : 230</Text>
-                                    <Text fontSize='sm' ml='15px'>NSE : 230</Text>
-                                </div>
+        <Box isOpen={isOpen} onClose={onClose} size='xl' width='100%' height='100%' className='boxShadow'>
+            {/* <ModalOverlay /> */}
+            <Box >
+                <Box bg={buyClicked.status ? 'blue.300' : 'orange.300'} color='white' padding='15px' borderRadius='10px'>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <div>
+                            <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+                                <Heading as='h3' size='sm'>{buyClicked.status ? 'Buy' : 'Sell'}</Heading>
+                                <Heading as='h3' size='sm' ml='15px'>IEX</Heading>
+                                <Text fontSize='xs' ml='5px' textAlign='start' >NSE</Text>
+                                {/* <CloseIcon /> */}
+                                <SmallCloseIcon />
+                                <Heading as='h3' size='sm'>10 Qty</Heading>
                             </div>
-
-                            <div style={{ display: 'flex', flexDirection: 'row', marginRight: '25px', justifyContent: 'center', alignItems: 'center' }}>
-                                <Tooltip label='Toggle Buy / Sell' placement='right'>
-                                    <div>
-                                        <Switch isChecked={buyClicked.status} onChange={(e) => handleBuySellChange(e)} />
-                                    </div>
-                                </Tooltip>
-                                <InfoOutlineIcon style={{ marginLeft: '10px', marginTop: '5px' }} />
+                            <div style={{ display: 'flex' }}>
+                                <Text fontSize='sm' >BSE : 230</Text>
+                                <Text fontSize='sm' ml='15px'>NSE : 230</Text>
                             </div>
                         </div>
-                        <div>
+
+                        <div style={{ display: 'flex', flexDirection: 'row', marginRight: '25px', justifyContent: 'center', alignItems: 'center' }}>
+                            <Tooltip label='Toggle Buy / Sell' placement='right'>
+                                <div>
+                                    <Switch isChecked={buyClicked.status} onChange={(e) => handleBuySellChange(e)} />
+                                </div>
+                            </Tooltip>
+                            <InfoOutlineIcon style={{ marginLeft: '10px', marginTop: '5px' }} />
+                        </div>
+                    </div>
+                    {/* <div>
                             <Tabs size='sm' mt='5px'>
                                 <TabList>
                                     <Tab>Regular</Tab>
@@ -81,93 +80,92 @@ const TradeOrderBox = ({ buyClicked, setBuyClicked, isOpen, onOpen, onClose }) =
                                 <TabPanels>
                                 </TabPanels>
                             </Tabs>
-                        </div>
-                    </ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody pt='40px' pb='35px' >
-                        <SimpleGrid columns={[2, null, 3]} spacing='40px'>
-                            <Box>
-                                <div style={{ display: 'flex', alignItems: 'center', }}>
-                                    <Radio />
-                                    <Text fontSize='md' ml='5px' > Intraday </Text>
-                                    <Text fontSize='xs' ml='5px' textAlign='center'> MIS </Text>
-                                </div>
+                        </div> */}
+                </Box>
+                {/* <ModalCloseButton /> */}
+                <Box padding='15px' >
+                    <SimpleGrid columns={[2, null, 3]} spacing='40px'>
+                        <Box>
+                            <div style={{ display: 'flex', alignItems: 'center', }}>
+                                <Radio />
+                                <Text fontSize='md' ml='5px' > Intraday </Text>
+                                <Text fontSize='xs' ml='5px' textAlign='center'> MIS </Text>
+                            </div>
 
-                                <NumberInput mt='10px' mb='10px' size='md'>
-                                    <NumberInputField placeholder='Qty' />
-                                    <NumberInputStepper>
-                                        <NumberIncrementStepper />
-                                        <NumberDecrementStepper />
-                                    </NumberInputStepper>
-                                </NumberInput>
+                            <NumberInput mt='10px' mb='10px' size='md'>
+                                <NumberInputField placeholder='Qty' />
+                                <NumberInputStepper>
+                                    <NumberIncrementStepper />
+                                    <NumberDecrementStepper />
+                                </NumberInputStepper>
+                            </NumberInput>
 
-                            </Box>
-                            <Box>
-                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                    <Radio />
-                                    <Text fontSize='md' ml='5px' > Longterm </Text>
-                                    <Text fontSize='xs' ml='5px' textAlign='center'> CNC </Text>
-                                </div>
+                        </Box>
+                        <Box>
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <Radio />
+                                <Text fontSize='md' ml='5px' > Longterm </Text>
+                                <Text fontSize='xs' ml='5px' textAlign='center'> CNC </Text>
+                            </div>
 
-                                <NumberInput mt='10px' mb='10px' size='md'>
-                                    <NumberInputField placeholder='Price' />
-                                    <NumberInputStepper>
-                                        <NumberIncrementStepper />
-                                        <NumberDecrementStepper />
-                                    </NumberInputStepper>
-                                </NumberInput>
+                            <NumberInput mt='10px' mb='10px' size='md'>
+                                <NumberInputField placeholder='Price' />
+                                <NumberInputStepper>
+                                    <NumberIncrementStepper />
+                                    <NumberDecrementStepper />
+                                </NumberInputStepper>
+                            </NumberInput>
 
-                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                    <Radio />
-                                    <Text fontSize='md' ml='5px' > Market </Text>
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <Radio />
+                                <Text fontSize='md' ml='5px' > Market </Text>
 
-                                    <Radio ml='10px' />
-                                    <Text fontSize='md' ml='5px' > Limit </Text>
-                                </div>
+                                <Radio ml='10px' />
+                                <Text fontSize='md' ml='5px' > Limit </Text>
+                            </div>
 
-                            </Box>
-                            <Box>
-                                <div style={{ display: 'flex', alignItems: 'center', visibility: 'hidden' }}>
-                                    <Radio />
-                                    <Text fontSize='md' ml='5px' > Longterm </Text>
-                                    <Text fontSize='xs' ml='5px' textAlign='center'> CNC </Text>
-                                </div>
-                                <NumberInput mt='10px' mb='10px' size='md'>
-                                    <NumberInputField placeholder='Trigger Price' />
-                                    <NumberInputStepper>
-                                        <NumberIncrementStepper />
-                                        <NumberDecrementStepper />
-                                    </NumberInputStepper>
-                                </NumberInput>
+                        </Box>
+                        <Box>
+                            <div style={{ display: 'flex', alignItems: 'center', visibility: 'hidden' }}>
+                                <Radio />
+                                <Text fontSize='md' ml='5px' > Longterm </Text>
+                                <Text fontSize='xs' ml='5px' textAlign='center'> CNC </Text>
+                            </div>
+                            <NumberInput mt='10px' mb='10px' size='md'>
+                                <NumberInputField placeholder='Trigger Price' />
+                                <NumberInputStepper>
+                                    <NumberIncrementStepper />
+                                    <NumberDecrementStepper />
+                                </NumberInputStepper>
+                            </NumberInput>
 
-                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                    <Radio />
-                                    <Text fontSize='md' ml='5px' > SL </Text>
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <Radio />
+                                <Text fontSize='md' ml='5px' > SL </Text>
 
-                                    <Radio ml='10px' />
-                                    <Text fontSize='md' ml='5px' > SL-M </Text>
-                                </div>
-                            </Box>
-                        </SimpleGrid>
-                    </ModalBody>
+                                <Radio ml='10px' />
+                                <Text fontSize='md' ml='5px' > SL-M </Text>
+                            </div>
+                        </Box>
+                    </SimpleGrid>
+                </Box>
 
-                    <ModalFooter display='flex' justifyContent='space-between' >
-                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                            <Text>Margin Required</Text>
-                            <InfoOutlineIcon size='sm' ml='5px' />
-                            <Text ml='5px'>$461.90</Text>
-                            <Text ml='2px' fontSize='sm' >(5x)</Text>
-                        </div>
-                        <div>
-                            <Button colorScheme={buyClicked.status ? 'blue' : 'orange'} mr={3} >
-                                {buyClicked.status ? 'Buy' : 'Sell'}
-                            </Button>
-                            <Button variant='ghost' onClick={onClose}>Cancel</Button>
-                        </div>
-                    </ModalFooter>
-                </ModalContent>
-            </Modal>
-        </div>
+                <Box display='flex' justifyContent='space-between' mt='5%' padding='15px' borderRadius='15px'>
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <Text>Margin Required</Text>
+                        <InfoOutlineIcon size='sm' ml='5px' />
+                        <Text ml='5px'>$461.90</Text>
+                        <Text ml='2px' fontSize='sm' >(5x)</Text>
+                    </div>
+                    <div>
+                        <Button colorScheme={buyClicked.status ? 'blue' : 'orange'} mr={3} >
+                            {buyClicked.status ? 'Buy' : 'Sell'}
+                        </Button>
+                        <Button variant='ghost' onClick={onClose}>Cancel</Button>
+                    </div>
+                </Box>
+            </Box>
+        </Box>
     )
 }
 

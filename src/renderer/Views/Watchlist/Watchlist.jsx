@@ -11,11 +11,11 @@ const Watchlist = () => {
     const [isShown, setIsShown] = useState(null);
     const [isShown2, setIsShown2] = useState(null);
     const [notFocused, setNotFocused] = useState({ display: 'none' });
-    const [buyClicked, setBuyClicked] = useState({
-        status: false,
-        data: []
-    });
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    // const [buyClicked, setBuyClicked] = useState({
+    //     status: false,
+    //     data: []
+    // });
+    // const { isOpen, onOpen, onClose } = useDisclosure();
     const [loading, setLoading] = useState(false);
 
     const toast = useToast();
@@ -331,7 +331,7 @@ const Watchlist = () => {
                 }
             </div>
 
-            <TradeOrderBox buyClicked={buyClicked} setBuyClicked={setBuyClicked} isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+            {/* <TradeOrderBox buyClicked={buyClicked} setBuyClicked={setBuyClicked} isOpen={isOpen} onOpen={onOpen} onClose={onClose} /> */}
 
             {
 
