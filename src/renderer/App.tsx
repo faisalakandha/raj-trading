@@ -3,10 +3,11 @@ import './App.css';
 import Watchlist from './Views/Watchlist/Watchlist';
 import Positions from './Views/Positions/Positions';
 import PAndL from './Views/P&L/PAndL';
-import { extendTheme, ChakraProvider, Box, Spinner, Center } from '@chakra-ui/react';
+import { extendTheme, ChakraProvider, Box, Spinner, Center, useDisclosure } from '@chakra-ui/react';
 import LoginPage from './Views/LoginPage/LoginPage';
 import { useEffect, useState } from 'react';
 import Orders from './Views/Orders/Orders';
+import TradeOrderBox from './Views/OrderBox/TradeOrderBox';
 
 const colors = {
   brand: {
@@ -150,18 +151,34 @@ const theme = extendTheme({ colors })
 
 const Home = () => {
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(true);
 
+  const [buyClicked, setBuyClicked] = useState({
+    status: true,
+    data: []
+  });
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+
   window.electron.ipcRenderer.DbChange((_event, value) => {
+    console.log("DB Change Value === ", value);
     setResult(false);
     console.log("My Result is true !");
   });
 
+  window.electron.ipcRenderer.OrderUpdate((_event, value) => {
+    console.log("Data Realtime From Electron ", value);
+  })
+
+  window.electron.ipcRenderer.MessageFromRenderer("I am renderer");
+
   useEffect(() => {
-    if (result === false)
+    if (result === false) {
+      console.log("Use Effects Fired for LOADING.........");
       setLoading(result);
-  }, [result]);
+    }
+  }, [result, setResult]);
 
   return (
     <div className="App">
@@ -184,7 +201,7 @@ const Home = () => {
                 </div>
                 <div className="BottomRightView">
                   <Box bgColor={'white'} className="Orders">
-                    <Orders />
+                    <TradeOrderBox buyClicked={buyClicked} setBuyClicked={setBuyClicked} isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
                   </Box>
                   <Box bgColor={'white'} className="PandL">
                     <PAndL />
