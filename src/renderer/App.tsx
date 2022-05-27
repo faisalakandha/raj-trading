@@ -155,7 +155,7 @@ const Home = () => {
   const [result, setResult] = useState(true);
 
   const [buyClicked, setBuyClicked] = useState({
-    status: false,
+    status: true,
     data: []
   });
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -166,6 +166,12 @@ const Home = () => {
     setResult(false);
     console.log("My Result is true !");
   });
+
+  window.electron.ipcRenderer.OrderUpdate((_event, value) => {
+    console.log("Data Realtime From Electron ", value);
+  })
+
+  window.electron.ipcRenderer.MessageFromRenderer("I am renderer");
 
   useEffect(() => {
     if (result === false) {
@@ -211,7 +217,7 @@ const Home = () => {
 
 export default function App() {
 
-  const [login, setLogin] = useState(true);
+  const [login, setLogin] = useState(false);
 
   useEffect(() => {
     if (sessionStorage.getItem('Login')) {

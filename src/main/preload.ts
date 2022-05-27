@@ -34,5 +34,13 @@ contextBridge.exposeInMainWorld('electron', {
     DbChange: (
       callback: (event: Electron.IpcRendererEvent, ...args: any[]) => void
     ) => ipcRenderer.on('event:dbChange', callback),
+
+    OrderUpdate: (
+      callback: (event: Electron.IpcRendererEvent, ...args: any[]) => void
+    ) => ipcRenderer.on('event:orderData', callback),
+
+    MessageFromRenderer: (msg: string) =>
+      ipcRenderer.send('event:messageFromRenderer', msg),
+
   },
 });

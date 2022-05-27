@@ -2,6 +2,8 @@ declare global {
   interface Window {
     electron: {
       ipcRenderer: {
+        MessageFromRenderer(mgs: string): void;
+        OrderUpdate(callback: (_event: any, value: any) => void): void;
         DbChange(callback: (_event: any, value: any) => void): void;
         GetAuthToken(query: string): void;
         OpenAuthWindow(msg: string): void;
@@ -16,4 +18,4 @@ declare global {
   }
 }
 
-export {};
+export { };

@@ -17,6 +17,9 @@ import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 const myElectron = require('electron');
 import db from '../backend/models/index';
+const fyers = require('fyers-api-v2');
+
+fyers.setAppId('FMR00CRGAK-100');
 
 db.mongoose
   .connect(db.url, {
@@ -187,3 +190,28 @@ ipcMain.handle('event:GetAuthToken', (event, arg) => {
   console.log(arg);
   return arg;
 });
+
+const reqBody = {
+  dataType: 'orderUpdate'
+};
+
+ipcMain.on('event:messageFromRenderer', (event, title) => {
+  AuthSession.findOne().sort({ field: 'asc', _id: -1 }).limit(1)
+    .then(data => {
+      console.log('DB DATA FROM place-order API: ', data.access);
+
+      fyers.setAccessToken(data.access);
+      const reqBody2 = {
+        symbol: ["NSE:JINDALSTEL-EQ"],
+
+        dataType: 'symbolUpdate'
+
+      }
+
+      fyers.fyers_connect(reqBody2, function (data) {
+        console.log('Market Data: ', data)
+        //write your code here
+        mainWindow?.webContents.send('event:orderData', data);
+      })
+    })
+})
