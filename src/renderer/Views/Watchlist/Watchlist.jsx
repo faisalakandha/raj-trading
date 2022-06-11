@@ -3,7 +3,7 @@ import { Input, Button, Heading, Stack, Tooltip, useDisclosure, Box, ScaleFade, 
 import TradeOrderBox from '../OrderBox/TradeOrderBox';
 import axios from 'axios';
 
-const Watchlist = () => {
+const Watchlist = ({ setSide, setSymbol }) => {
     const [rawWatclistData, setRawWatchlistData] = useState([]);
     const [watclistData, setWatchlistData] = useState([]);
     const [savedTrade, setSavedTrade] = useState([]);
@@ -97,7 +97,7 @@ const Watchlist = () => {
     function containsObject(obj, list) {
         var i;
         for (i = 0; i < list.length; i++) {
-            if (list[i]._id === obj._id) {
+            if (list[i][0] === obj[0]) {
                 return true;
             }
         }
@@ -107,7 +107,7 @@ const Watchlist = () => {
 
     const mergeArrayOfObjects = (original, newdata, selector = '_id') => {
         newdata.forEach(dat => {
-            const foundIndex = original.findIndex(ori => ori[selector] == dat[selector]);
+            const foundIndex = original.findIndex(ori => ori[0] == dat[0]);
             if (foundIndex >= 0) original.splice(foundIndex, 1, dat);
             else original.push(dat);
         });
@@ -134,9 +134,11 @@ const Watchlist = () => {
 
     const handleAddBtn = (data) => {
 
-        console.log(savedTrade);
+        console.log(savedTrade, multiSavedTrade);
 
-        const result = mergeArrayOfObjects(savedTrade, multiSavedTrade, '_id');
+        const result = [...savedTrade, ...multiSavedTrade];
+
+        console.log("MERGED ARRAYS :::::   ", result);
 
         if (!containsObject(data, result)) {
             //console.log(savedTrade.includes(data));
@@ -189,8 +191,8 @@ const Watchlist = () => {
     }
 
     const handleDeleteBtn = (id) => {
-        const updatedSavedTrade = savedTrade.filter((item => item._id !== id));
-        const updatedMultiSavedTrade = multiSavedTrade.filter((item => item._id !== id))
+        const updatedSavedTrade = savedTrade.filter((item => item[0] !== id));
+        const updatedMultiSavedTrade = multiSavedTrade.filter((item => item[0] !== id))
         setSavedTrade(updatedSavedTrade);
         setMultiSavedTrade(updatedMultiSavedTrade);
         toast({
@@ -226,20 +228,54 @@ const Watchlist = () => {
         }
 
         console.log(value);
+
         let result = [];
-        result = rawWatclistData.filter((data) => {
-            //console.log(data.name.toLowerCase().search(value) != -1);
-            return data.acode.toLowerCase().indexOf(value) != -1;
-        });
-        if (result.length === 0) {
-            result = rawWatclistData.filter((data) => {
-                //console.log(data.name.toLowerCase().search(value) != -1);
-                return data.name.toLowerCase().indexOf(value) != -1;
-            });
-        }
+
+        // result = rawWatclistData.filter((data) => {
+        //     //console.log(data.name.toLowerCase().search(value) != -1);
+        //     return data.acode.toLowerCase().indexOf(value) != -1;
+        // });
+        // if (result.length === 0) {
+        //     result = rawWatclistData.filter((data) => {
+        //         //console.log(data.name.toLowerCase().search(value) != -1);
+        //         return data.name.toLowerCase().indexOf(value) != -1;
+        //     });
+        // }
+
+
+
         console.log('result', result);
         if (value.length !== 0) {
-            setWatchlistData(result);
+            //setWatchlistData(result);
+
+            axios.get(`http://localhost:8080/get-searched-symbols/${value}`)
+                .then(function (response) {
+                    //console.log(response);
+                    if (response !== undefined) {
+                        console.log("GET SEARCHED SYMBOLS  :::::   ", response.data.data.Records);
+                        setRawWatchlistData(response.data.data.Records);
+                        setWatchlistData(response.data.data.Records);
+                    }
+                })
+                .catch(function (error) {
+                    if (error.response) {
+                        // The request was made and the server responded with a status code
+                        // that falls out of the range of 2xx
+                        console.log(error.response.data);
+                        console.log(error.response.status);
+                        console.log(error.response.headers);
+                    } else if (error.request) {
+                        // The request was made but no response was received
+                        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                        // http.ClientRequest in node.js
+                        console.log(error.request);
+                    } else {
+                        // Something happened in setting up the request that triggered an Error
+                        console.log('Error', error.message);
+                    }
+                    console.log(error.config);
+                });
+
         }
         else {
             setWatchlistData([]);
@@ -251,13 +287,17 @@ const Watchlist = () => {
     }
 
     const handleBuySellClicked = (singleData, flag) => {
+        console.log(singleData);
         if (flag === 'B') {
-            setBuyClicked({ status: true, data: singleData });
+            setSide(1);
+            setSymbol(singleData[4] + ':' + singleData[1] + '-' + singleData[2]);
         }
         if (flag === 'S') {
-            setBuyClicked({ status: false, data: singleData });
+            // setBuyClicked({ status: false, data: singleData });
+            setSide(-1);
+            setSymbol(singleData[4] + ':' + singleData[1] + '-' + singleData[2]);
         }
-        onOpen();
+        // onOpen();
     }
 
     return (
@@ -272,11 +312,11 @@ const Watchlist = () => {
                     watclistData.length !== 0 ?
 
                         watclistData.map(singleData =>
-                            <Box key={singleData._id} style={{ width: '98%', display: 'flex', justifyContent: 'space-evenly', flexDirection: 'column', alignItems: 'center' }} className='watch-list-card'
+                            <Box key={singleData[0]} style={{ width: '98%', display: 'flex', justifyContent: 'space-evenly', flexDirection: 'column', alignItems: 'center' }} className='watch-list-card'
 
                                 p='10px' mt='10px' maxW='md' borderWidth='0px' borderRadius='lg'
 
-                                onMouseEnter={() => setIsShown(singleData._id)}
+                                onMouseEnter={() => setIsShown(singleData[0])}
                                 onMouseLeave={() => setIsShown(null)}
                             >
                                 <Tooltip label='Click To Add' placement='right'>
@@ -287,25 +327,25 @@ const Watchlist = () => {
                                         p='10px' mt='10px' mb='10px' borderWidth='0px' borderRadius='md'
                                     >
                                         <div style={{ marginRight: '10px', width: '55%', textAlign: 'left' }}>
-                                            <Tooltip label='Name' placement='top'>
-                                                <Text fontSize='sm' >{singleData.name}</Text>
+                                            <Tooltip label='Symbol' placement='top'>
+                                                <Text fontSize='sm' >{singleData[4] + ':' + singleData[1] + '-' + singleData[2]}</Text>
                                             </Tooltip>
                                         </div>
                                         <div style={{ marginRight: '10px', width: '25%' }}>
                                             <Tooltip label='S-Code' placement='top'>
-                                                <Text fontSize='sm' >{singleData.scode}</Text>
+                                                <Text fontSize='sm' >{singleData[3]}</Text>
                                             </Tooltip>
                                         </div>
                                         <div style={{ width: '20%' }}>
                                             <Tooltip label='A-code' placement='top'>
-                                                <Text fontSize='sm' >{singleData.acode}</Text>
+                                                <Text fontSize='sm' >{singleData[5]}</Text>
                                             </Tooltip>
                                         </div>
                                     </Box>
                                 </Tooltip>
 
                                 {
-                                    isShown === singleData._id && (
+                                    isShown === singleData[0] && (
                                         <ScaleFade unmountOnExit={true} reverse initialScale={0.95} in={isShown}>
                                             <Stack spacing={1} direction={['column', 'row']} align='center' style={{ zIndex: '100' }}>
                                                 <Button colorScheme='blue' size='sm' onClick={() => handleBuySellClicked(singleData, 'B')}>B</Button>
@@ -356,7 +396,7 @@ const Watchlist = () => {
                     savedTrade.length !== 0 ?
 
                         savedTrade.map(singleData =>
-                            <Box w='98%' key={singleData._id} style={notFocused} onMouseEnter={() => setIsShown2(singleData._id)}
+                            <Box w='98%' key={singleData[0]} style={notFocused} onMouseEnter={() => setIsShown2(singleData[0])}
                                 onMouseLeave={() => setIsShown2(null)}
 
                             >
@@ -373,29 +413,29 @@ const Watchlist = () => {
                                         <p>{singleData.percentage}</p> */}
                                         <div style={{ marginRight: '10px', width: '55%', textAlign: 'left' }}>
                                             <Tooltip label='Name' placement='top'>
-                                                <Text fontSize='sm' >{singleData.name}</Text>
+                                                <Text fontSize='sm' >{singleData[4] + ':' + singleData[1] + '-' + singleData[2]}</Text>
                                             </Tooltip>
                                         </div>
                                         <div style={{ marginRight: '10px', width: '25%' }}>
                                             <Tooltip label='S-Code' placement='top'>
-                                                <Text fontSize='sm' >{singleData.scode}</Text>
+                                                <Text fontSize='sm' >{singleData[3]}</Text>
                                             </Tooltip>
                                         </div>
                                         <div style={{ width: '20%' }}>
                                             <Tooltip label='A-code' placement='top'>
-                                                <Text fontSize='sm' >{singleData.acode}</Text>
+                                                <Text fontSize='sm' >{singleData[5]}</Text>
                                             </Tooltip>
                                         </div>
                                     </Box>
                                     {
-                                        isShown2 === singleData._id &&
+                                        isShown2 === singleData[0] &&
                                         <ScaleFade initialScale={0.9} in={isShown2}>
                                             <Stack spacing={1} direction={['column', 'row']} align='center'>
                                                 <Button colorScheme='blue' size='sm' onClick={() => handleBuySellClicked(singleData, 'B')}>B</Button>
                                                 <Button onClick={() => handleBuySellClicked(singleData, 'S')} bg='orange.300' color='white' size='sm' _hover={{ bg: 'orange.400' }}>S</Button>
                                                 <Button size='sm'>{'->'}</Button>
                                                 <Button size='sm'>=</Button>
-                                                <Button size='sm' colorScheme='red' variant='solid' onClick={() => handleDeleteBtn(singleData._id)}>-</Button>
+                                                <Button size='sm' colorScheme='red' variant='solid' onClick={() => handleDeleteBtn(singleData[0])}>-</Button>
                                             </Stack>
                                         </ScaleFade>
                                     }

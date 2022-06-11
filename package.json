@@ -258,6 +258,7 @@
   "collective": {
     "url": "https://opencollective.com/electron-react-boilerplate-594"
   },
+  "proxy": "https://api.truedata.in",
   "browserslist": [],
   "prettier": {
     "overrides": [

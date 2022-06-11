@@ -19,11 +19,12 @@ import {
     Tooltip,
     Input,
     Select,
+    useToast
 } from '@chakra-ui/react';
 import { CloseIcon, InfoOutlineIcon, SmallCloseIcon } from '@chakra-ui/icons';
 import axios from 'axios';
 
-const TradeOrderBox = ({ buyClicked, setBuyClicked, isOpen, onOpen, onClose }) => {
+const TradeOrderBox = ({ side, setSide, modifyOrder, setModifyOrder, id, setId, symbol, setSymbol }) => {
 
     // const [buyTrue, setBuyTrue] = useState(false);
 
@@ -31,21 +32,22 @@ const TradeOrderBox = ({ buyClicked, setBuyClicked, isOpen, onOpen, onClose }) =
 
     //console.log(isOpen, onOpen, onClose);
 
-    const [side, setSide] = useState(1);
 
-    const [symbol, setSymbol] = useState("");
+    //const [symbol, setSymbol] = useState("");
     const [productType, setProductType] = useState("");
     //const [type, setType] = useState("");
-    const [disclosedQty, setDisclosedQty] = useState("");
-    const [stopLoss, setStopLoss] = useState("");
-    const [stopPrice, setStopPrice] = useState("");
+    //const [disclosedQty, setDisclosedQty] = useState("");
+    //const [stopLoss, setStopLoss] = useState("");
+    //const [stopPrice, setStopPrice] = useState("");
     const [type, setType] = useState("");
-    const [limitPrice, setLimitPrice] = useState("");
+    //const [limitPrice, setLimitPrice] = useState("");
     const [validity, setValidity] = useState("");
     const [qty, setQty] = useState("");
     //const [triggerPrice, setTriggerPrice] = useState("");
-    const [takeProfit, setTakeProfit] = useState("");
+    //const [takeProfit, setTakeProfit] = useState("");
     const [offlineOrder, setOfflineOrder] = useState(false);
+
+    const toast = useToast();
 
 
 
@@ -68,66 +70,119 @@ const TradeOrderBox = ({ buyClicked, setBuyClicked, isOpen, onOpen, onClose }) =
             "type": type,
             "side": side,
             "productType": productType,
-            "limitPrice": limitPrice,
-            "stopPrice": stopPrice,
+            "limitPrice": 0,
+            "stopPrice": 0,
             "validity": validity,
-            "disclosedQty": disclosedQty,
+            "disclosedQty": 0,
             "offlineOrder": offlineOrder,
-            "stopLoss": stopLoss,
-            "takeProfit": takeProfit
+            "stopLoss": 0,
+            "takeProfit": 0
+        };
+
+        const reqBodyModify = {
+            "id": id,
+            "qty": qty,
+            "type": type,
+            "side": side,
+            "limitPrice": 0,
+            "stopPrice": 0,
+            "offlineOrder": offlineOrder
         }
 
-        console.log(reqBody);
+        console.log(reqBodyModify);
 
-        const url = 'http://localhost:8080/place-order'
+        if (modifyOrder === false) {
+            const url = 'http://localhost:8080/place-order'
 
-        axios.post(url, reqBody).then((res) => {
-            console.log(res);
-        }).catch((e) => {
-            console.log(e);
-        })
+            axios.post(url, reqBody).then((res) => {
+                console.log(res.data);
+                const message = res.data.success.message;
+                toast({
+                    title: 'Success',
+                    description: res.data.success.message,
+                    status: res.data.success.code !== 200 ? 'info' : 'success',
+                    duration: 2000,
+                    isClosable: true,
+                })
+            }).catch((e) => {
+                console.log(e);
+                toast({
+                    title: 'Unexpected Error',
+                    description: 'Something Went Wrong!',
+                    status: 'error',
+                    duration: 2000,
+                    isClosable: true,
+                })
+            })
+        }
+        if (modifyOrder === true) {
+            const url2 = 'http://localhost:8080/modify-order'
+
+            axios.post(url2, reqBodyModify).then((res) => {
+                console.log(res.data.success.msg);
+                toast({
+                    title: 'Success',
+                    description: res.data.success.message,
+                    status: res.data.success.code !== 200 ? 'info' : 'success',
+                    duration: 2000,
+                    isClosable: true,
+                })
+            }).catch((e) => {
+                console.log(e);
+                toast({
+                    title: 'Unexpected Error',
+                    description: 'Something Went Wrong',
+                    status: 'error',
+                    duration: 2000,
+                    isClosable: true,
+                })
+            })
+        }
+
     }
 
     const handleCancel = () => {
-        setBuyClicked('');
-        setDisclosedQty('');
-        setLimitPrice('');
+        //setBuyClicked('');
+        //setDisclosedQty('');
+        //setLimitPrice('');
         setProductType('');
         setQty('');
-        setStopLoss('');
-        setStopPrice('');
+        //setStopLoss('');
+        //setStopPrice('');
         setSymbol('');
-        setTakeProfit('');
+        //setTakeProfit('');
         //setTriggerPrice('');
         setType('');
         setValidity('');
-        setStopLoss('');
+        //setStopLoss('');
+        setId('');
+        setModifyOrder(false);
     }
 
     const parse = (val) => val.replace(/^\$/, '');
 
     return (
-        <Box isOpen={isOpen} onClose={onClose} size='xl' width='100%' height='100%' className='boxShadow' overflow='auto'>
+        <Box size='xl' width='100%' height='100%' className='boxShadow' overflow='auto'>
 
             <form onSubmit={(e) => handleSubmit(e)}>
 
                 {/* <ModalOverlay /> */}
                 <Box >
                     <Box bg={side === 1 ? 'blue.300' : 'orange.300'} color='white' padding='15px' borderRadius='10px'>
-                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', padding: '.5rem' }}>
                             <div>
                                 <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-                                    <Heading as='h3' size='sm'>{buyClicked.status ? 'Buy' : 'Sell'}</Heading>
-                                    <Heading as='h3' size='sm' ml='15px'>IEX</Heading>
-                                    <Text fontSize='xs' ml='5px' textAlign='start' >NSE</Text>
+                                    <Heading as='h3' size='sm' mr='.5rem'>{side === 1 ? 'Buy' : 'Sell'}</Heading>
+                                    <Heading as='h3' size='sm' ml='15px' mr='15px'>{symbol ? symbol : " "}</Heading>
+                                    {/* <Text fontSize='xs' ml='5px' textAlign='start' >NSE</Text> */}
                                     {/* <CloseIcon /> */}
-                                    <SmallCloseIcon />
-                                    <Heading as='h3' size='sm'>10 Qty</Heading>
+                                    <SmallCloseIcon mr='.5rem' />
+                                    <Heading as='h3' size='sm'>QTY: {qty}</Heading>
                                 </div>
-                                <div style={{ display: 'flex' }}>
+                                {/* <div style={{ display: 'flex' }}>
                                     <Text fontSize='sm' >BSE : 230</Text>
                                     <Text fontSize='sm' ml='15px'>NSE : 230</Text>
-                                </div>
+                                </div> */}
                             </div>
 
                             <div style={{ display: 'flex', flexDirection: 'row', marginRight: '25px', justifyContent: 'center', alignItems: 'center' }}>
@@ -162,29 +217,40 @@ const TradeOrderBox = ({ buyClicked, setBuyClicked, isOpen, onOpen, onClose }) =
                                     <Text fontSize='md' ml='5px' > Intraday </Text>
                                     <Text fontSize='xs' ml='5px' textAlign='center'> MIS </Text>
                                 </div> */}
+                                {
+                                    modifyOrder &&
+                                    <Input isRequired placeholder='ID' mt='10px' mb='10px' size='md' name='ID' value={id}
+                                        onChange={e => setId(e.target.value)} />
+                                }
+                                {
+                                    !modifyOrder &&
+                                    <Input isRequired placeholder='Symbol' mt='10px' mb='10px' size='md' name='symbol' value={symbol}
+                                        onChange={e => setSymbol(e.target.value)} />
+                                }
 
-                                <Input isRequired placeholder='Symbol' mt='10px' mb='10px' size='md' name='symbol' value={symbol}
-                                    onChange={e => setSymbol(e.target.value)} />
+                                {
+                                    !modifyOrder &&
+                                    <Select isRequired placeholder='Product Type' mb='10px' size='md' value={productType}
+                                        onChange={e => setProductType(e.target.value)}>
+                                        <option value='CNC'>CNC</option>
+                                        <option value='INTRADAY'>INTRADAY</option>
+                                        <option value='MARGIN'> MARGIN</option>
+                                        <option value='CO'> CO</option>
+                                        <option value='BO'> BO</option>
+                                    </Select>
+                                }
 
-
-                                <Select isRequired placeholder='Product Type' mb='10px' size='md' value={productType}
-                                    onChange={e => setProductType(e.target.value)}>
-                                    <option value='CNC'>CNC</option>
-                                    <option value='INTRADAY'>INTRADAY</option>
-                                    <option value='MARGIN'> MARGIN</option>
-                                    <option value='CO'> CO</option>
-                                    <option value='BO'> BO</option>
-                                </Select>
-
-                                <NumberInput value={disclosedQty}
-                                    onChange={e => setDisclosedQty(e)} isRequired mt='10px' mb='10px' size='md'  >
-                                    <NumberInputField placeholder='Disclosed QTY' />
-                                    <NumberInputStepper>
-                                        <NumberIncrementStepper />
-                                        <NumberDecrementStepper />
-                                    </NumberInputStepper>
-                                </NumberInput>
-
+                                {/* {
+                                    !modifyOrder &&
+                                    <NumberInput value={disclosedQty}
+                                        onChange={e => setDisclosedQty(e)} isRequired mt='10px' mb='10px' size='md'  >
+                                        <NumberInputField placeholder='Disclosed QTY' />
+                                        <NumberInputStepper>
+                                            <NumberIncrementStepper />
+                                            <NumberDecrementStepper />
+                                        </NumberInputStepper>
+                                    </NumberInput>
+                                } */}
 
 
                             </Box>
@@ -220,14 +286,18 @@ const TradeOrderBox = ({ buyClicked, setBuyClicked, isOpen, onOpen, onClose }) =
                                 
                                 */}
 
-                                <NumberInput isRequired value={takeProfit}
-                                    onChange={e => setTakeProfit(e)} id='takeProfit' mt='10px' mb='10px' size='md' >
-                                    <NumberInputField placeholder='Take Profit D(0)' />
-                                    <NumberInputStepper>
-                                        <NumberIncrementStepper />
-                                        <NumberDecrementStepper />
-                                    </NumberInputStepper>
-                                </NumberInput>
+
+                                {/* {
+                                    !modifyOrder &&
+                                    <NumberInput isRequired value={takeProfit}
+                                        onChange={e => setTakeProfit(e)} id='takeProfit' mt='10px' mb='10px' size='md' >
+                                        <NumberInputField placeholder='Take Profit D(0)' />
+                                        <NumberInputStepper>
+                                            <NumberIncrementStepper />
+                                            <NumberDecrementStepper />
+                                        </NumberInputStepper>
+                                    </NumberInput>
+                                } */}
 
                                 <Select value={type}
                                     onChange={e => setType(e.target.value)} isRequired placeholder='Type' mt='10px' mb='10px' size='md'>
@@ -237,11 +307,15 @@ const TradeOrderBox = ({ buyClicked, setBuyClicked, isOpen, onOpen, onClose }) =
                                     <option value='4'> Stoplimit Order (SL-L)</option>
                                 </Select>
 
-                                <Select value={validity}
-                                    onChange={e => setValidity(e.target.value)} isRequired placeholder='Validity' mt='10px' mb='10px' size='md'>
-                                    <option value='IOC'> Immediate or Cancel</option>
-                                    <option value='DAY'>Valid till the end of the day</option>
-                                </Select>
+                                {
+                                    !modifyOrder &&
+                                    <Select value={validity}
+                                        onChange={e => setValidity(e.target.value)} isRequired placeholder='Validity' mt='10px' mb='10px' size='md'>
+                                        <option value='IOC'> Immediate or Cancel</option>
+                                        <option value='DAY'>Valid till the end of the day</option>
+                                    </Select>
+                                }
+
 
                             </Box>
                             <Box>
@@ -251,7 +325,7 @@ const TradeOrderBox = ({ buyClicked, setBuyClicked, isOpen, onOpen, onClose }) =
                                     <Text fontSize='xs' ml='5px' textAlign='center'> CNC </Text>
                                 </div> */}
 
-                                <NumberInput value={qty}
+                                <NumberInput min="0" value={qty}
                                     onChange={e => setQty(e)} isRequired mt='10px' mb='10px' size='md'>
 
                                     <NumberInputField placeholder='Qty(Quantity)' />
@@ -261,29 +335,36 @@ const TradeOrderBox = ({ buyClicked, setBuyClicked, isOpen, onOpen, onClose }) =
                                     </NumberInputStepper>
                                 </NumberInput>
 
-
-                                {/* <div style={{ display: 'flex', alignItems: 'center' }}>
-                                    <Radio />
-                                    <Text fontSize='md' ml='5px' > SL </Text>
-
-                                    <Radio ml='10px' />
-                                    <Text fontSize='md' ml='5px' > SL-M </Text>
-                                </div> */}
-
-                                <NumberInput value={limitPrice}
+                                {
+                                    /* <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <Radio />
+                                        <Text fontSize='md' ml='5px' > SL </Text>
+    
+                                        <Radio ml='10px' />
+                                        <Text fontSize='md' ml='5px' > SL-M </Text>
+                                    </div> */
+                                }
+                                {/* <NumberInput value={limitPrice}
                                     onChange={e => setLimitPrice(e)} isRequired mt='10px' mb='10px' size='md'>
                                     <NumberInputField placeholder='Limit Price' />
                                     <NumberInputStepper>
                                         <NumberIncrementStepper />
                                         <NumberDecrementStepper />
                                     </NumberInputStepper>
-                                </NumberInput>
+                                </NumberInput> */}
 
-                                <Select value={offlineOrder}
-                                    onChange={e => setOfflineOrder(e.target.value)} isRequired placeholder='Offline Order' mt='10px' mb='10px' size='md'>
-                                    <option value='False'> False </option>
-                                    <option value='True'> True </option>
-                                </Select>
+                                {/* {
+                                    !modifyOrder &&
+                                    <NumberInput value={stopLoss} onChange={e => setStopLoss(e)} isRequired id='stopLoss' mt='10px' mb='10px' size='md'>
+                                        <NumberInputField
+                                            placeholder='Stop Loss' />
+                                        <NumberInputStepper>
+                                            <NumberIncrementStepper />
+                                            <NumberDecrementStepper />
+                                        </NumberInputStepper>
+                                    </NumberInput>
+                                } */}
+
 
                             </Box>
                             <Box>
@@ -308,23 +389,23 @@ const TradeOrderBox = ({ buyClicked, setBuyClicked, isOpen, onOpen, onClose }) =
                                     <Radio ml='10px' />
                                     <Text fontSize='md' ml='5px' > SL-M </Text>
                                 </div> */}
-                                <NumberInput value={stopPrice}
+
+
+                                {/* <NumberInput value={stopPrice}
                                     onChange={e => setStopPrice(e)} isRequired id='stopPrice' mt='10px' mb='10px' size='md'>
                                     <NumberInputField placeholder='Stop Price' />
                                     <NumberInputStepper>
                                         <NumberIncrementStepper />
                                         <NumberDecrementStepper />
                                     </NumberInputStepper>
-                                </NumberInput>
+                                </NumberInput> */}
 
-                                <NumberInput value={stopLoss} onChange={e => setStopLoss(e)} isRequired id='stopLoss' mt='10px' mb='10px' size='md'>
-                                    <NumberInputField
-                                        placeholder='Stop Loss' />
-                                    <NumberInputStepper>
-                                        <NumberIncrementStepper />
-                                        <NumberDecrementStepper />
-                                    </NumberInputStepper>
-                                </NumberInput>
+
+                                <Select value={offlineOrder}
+                                    onChange={e => setOfflineOrder(e.target.value)} isRequired placeholder='Offline Order' mt='10px' mb='10px' size='md'>
+                                    <option value='False'> False </option>
+                                    <option value='True'> True </option>
+                                </Select>
                             </Box>
                         </SimpleGrid>
                     </Box>
@@ -337,9 +418,16 @@ const TradeOrderBox = ({ buyClicked, setBuyClicked, isOpen, onOpen, onClose }) =
                             <Text ml='2px' fontSize='sm' >(5x)</Text>
                         </div>
                         <div>
-                            <Button type='submit' colorScheme={side === 1 ? 'blue' : 'orange'} mr={3} >
-                                {side === 1 ? 'Buy' : 'Sell'}
-                            </Button>
+                            {
+                                modifyOrder ?
+                                    <Button type='submit' colorScheme={'orange'} mr={3} >
+                                        Modify
+                                    </Button>
+                                    :
+                                    <Button type='submit' colorScheme={side === 1 ? 'blue' : 'orange'} mr={3} >
+                                        {side === 1 ? 'Buy' : 'Sell'}
+                                    </Button>
+                            }
                             <Button variant='ghost' onClick={() => handleCancel()}>Cancel</Button>
                         </div>
                     </Box>

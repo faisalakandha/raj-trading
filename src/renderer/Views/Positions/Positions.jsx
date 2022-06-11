@@ -1,92 +1,17 @@
 import { AddIcon, EditIcon, ExternalLinkIcon, HamburgerIcon, RepeatClockIcon, RepeatIcon } from '@chakra-ui/icons';
-import { Box, Heading, Text, Grid, GridItem, Menu, MenuButton, MenuList, MenuIcon, IconButton, MenuItem } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import {
+    Box, Heading, Text, Grid, GridItem, Menu, MenuButton, MenuList, MenuIcon, IconButton, MenuItem, useToast, useDisclosure, AlertDialog,
+    AlertDialogBody,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogContent,
+    AlertDialogOverlay,
+    Button
+} from '@chakra-ui/react';
+import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 
-const Positions = () => {
-
-    const fakePositionsData = [
-        {
-            'netQty': 1,
-            'qty': 1,
-            'avgPrice': 72256.0,
-            'netAvg': 71856.0,
-            'side': 1,
-            'productType': 'MARGIN',
-            'realized_profit': 400.0,
-            'unrealized_profit': 461.0,
-            'pl': 861.0,
-            'ltp': 72717.0,
-            'buyQty': 2,
-            'buyAvg': 72256.0,
-            'buyVal': 144512.0,
-            'sellQty': 1,
-            'sellAvg': 72656.0,
-            'sellVal': 72656.0,
-            'slNo': 0,
-            'fyToken': '1120200831217406',
-            'dummy': '',
-            'crossCurrency': 'N',
-            'rbiRefRate': 1.0,
-            'qtyMulti_com': 1.0,
-            'segment': 20,
-            'symbol': 'MCX:SILVERMIC20AUGFUT',
-            'id': 'MCX:SILVERMIC20AUGFUT-MARGIN'
-        },
-        {
-            'netQty': 1,
-            'qty': 1,
-            'avgPrice': 72256.0,
-            'netAvg': 71856.0,
-            'side': 1,
-            'productType': 'MARGIN',
-            'realized_profit': 400.0,
-            'unrealized_profit': 461.0,
-            'pl': 861.0,
-            'ltp': 72717.0,
-            'buyQty': 2,
-            'buyAvg': 72256.0,
-            'buyVal': 144512.0,
-            'sellQty': 1,
-            'sellAvg': 72656.0,
-            'sellVal': 72656.0,
-            'slNo': 0,
-            'fyToken': '1120200831217406',
-            'dummy': '',
-            'crossCurrency': 'N',
-            'rbiRefRate': 1.0,
-            'qtyMulti_com': 1.0,
-            'segment': 20,
-            'symbol': 'MCX:SILVERMIC20AUGFUT',
-            'id': 'MCX:SILVERMIC22AUGFUT-MARGIN'
-        },
-        {
-            'netQty': 1,
-            'qty': 1,
-            'avgPrice': 72256.0,
-            'netAvg': 71856.0,
-            'side': 1,
-            'productType': 'MARGIN',
-            'realized_profit': 400.0,
-            'unrealized_profit': 461.0,
-            'pl': 861.0,
-            'ltp': 72717.0,
-            'buyQty': 2,
-            'buyAvg': 72256.0,
-            'buyVal': 144512.0,
-            'sellQty': 1,
-            'sellAvg': 72656.0,
-            'sellVal': 72656.0,
-            'slNo': 0,
-            'fyToken': '1120200831217406',
-            'dummy': '',
-            'crossCurrency': 'N',
-            'rbiRefRate': 1.0,
-            'qtyMulti_com': 1.0,
-            'segment': 20,
-            'symbol': 'MCX:SILVERMIC20AUGFUT',
-            'id': 'MCX:SILVERMIC24AUGFUT-MARGIN'
-        }
-    ];
+const Positions = ({ modifyOrder, setModifyOrder, positions, setPositions, id, setId }) => {
 
     const customStyle = {
         'display': 'flex',
@@ -94,19 +19,72 @@ const Positions = () => {
         'align-items': 'center',
     }
 
-    const [positions, setPositions] = useState(fakePositionsData);
+    //const [positions, setPositions] = useState(fakePositionsData);
+
+    const [pos, setPos] = useState([]);
+    //console.log('INSIDE SET TOTAL USE EFFECT: ', pos ? pos : '');
+    const toast = useToast();
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const cancelRef = React.useRef();
+
+    useEffect(() => {
+        const newTotal = positions ? positions : [];
+        setPos(newTotal);
+        //console.log('INSIDE SET TOTAL USE EFFECT: ', newTotal);
+    }, [positions]);
+
+    const handleExitTrade = (singleId) => {
+
+        onOpen()
+        console.log(isOpen, cancelRef, "IDDD: ", singleId);
+
+        const url = 'http://localhost:8080/exit-order';
+
+        const reqBodyExit = {
+
+            "id": singleId
+
+        }
+
+        axios.post(url, reqBodyExit).then((res) => {
+            console.log(res.data);
+            const message = res.data.success.message;
+            toast({
+                title: res.data.success.code !== 200 ? 'info' : 'success',
+                description: res.data.success.message,
+                status: res.data.success.code !== 200 ? 'info' : 'success',
+                duration: 2000,
+                isClosable: true,
+            })
+        }).catch((e) => {
+            console.log(e);
+            toast({
+                title: 'Unexpected Error',
+                description: 'Something Went Wrong!',
+                status: 'error',
+                duration: 2000,
+                isClosable: true,
+            })
+        })
+    }
+
+    const handleModifyTrade = (singleId) => {
+        setModifyOrder(modifyOrder === false ? true : modifyOrder);
+        setId(singleId);
+    }
+
 
     return (
         <div style={{ height: '-webkit-fill-available', overflow: 'auto', fontFamily: 'poppins' }}>
             <Heading pt='10px' pb='5px' as='h1' size='sm' fontFamily='poppins'>Positions</Heading>
 
-            <Grid templateColumns='repeat(9, 1fr)' gap={6} maxWidth='100%' marginTop='5vh' margin='2vh' padding='0vh 5vh 0vh 5vh' textAlign='left' >
+            <Grid templateColumns='repeat(10, 1fr)' gap={6} maxWidth='100%' marginTop='5vh' margin='2vh' padding='0vh 5vh 0vh 5vh' textAlign='left' >
                 <GridItem w='15vh' h='10'>
                     <Text color='gray.500' fontSize='sm'>Symbol: </Text>
                 </GridItem>
 
                 <GridItem w='100%' h='10'>
-                    <Text color='gray.500' fontSize='sm'>Product: </Text>
+                    <Text color='gray.500' fontSize='sm'>Product Type: </Text>
                 </GridItem>
 
                 <GridItem w='100%' h='10'>
@@ -114,11 +92,15 @@ const Positions = () => {
                 </GridItem>
 
                 <GridItem w='100%' h='10'>
-                    <Text color='gray.500' fontSize='sm'>Side: </Text>
+                    <Text color='gray.500' fontSize='sm'>BUY/SELL: </Text>
                 </GridItem>
 
                 <GridItem w='100%' h='10'>
                     <Text color='gray.500' fontSize='sm'>Buy Qty: </Text>
+                </GridItem>
+
+                <GridItem w='100%' h='10'>
+                    <Text color='gray.500' fontSize='sm'>Sell Qty: </Text>
                 </GridItem>
 
                 <GridItem w='100%' h='10'>
@@ -139,17 +121,19 @@ const Positions = () => {
                 {/* <Text color='gray.500' fontSize='sm'>Symbol: </Text> */}
 
             </Grid>
+
             {
-                positions && positions.map(singleData =>
+                positions && positions.map(singleData => (
 
+                    singleData.buyQty !== singleData.sellQty &&
 
-                    <Grid templateColumns='repeat(9, 1fr)' gap={6} margin='2vh' maxWidth='100%' paddingLeft='5vh' paddingRight='5vh' paddingTop='2vh' textAlign='left' className='boxShadow' borderRadius='12px'>
+                    <Grid templateColumns='repeat(10, 1fr)' gap={6} margin='2vh' maxWidth='100%' paddingLeft='5vh' paddingRight='5vh' paddingTop='2vh' textAlign='left' className='boxShadow' borderRadius='12px'>
                         <GridItem w='15vh' h='10'>
-                            <Text color='gray.500' fontSize='sm'>{singleData.symbol.split(':')[1]}</Text>
+                            <Text color='gray.500' fontSize='sm'>{singleData.symbol}</Text>
                         </GridItem>
 
                         <GridItem w='100%' h='10'>
-                            <Text color='gray.500' fontSize='sm'>{singleData.symbol.split(':')[0]} </Text>
+                            <Text color='gray.500' fontSize='sm'>{singleData.productType} </Text>
                         </GridItem>
 
                         <GridItem w='100%' h='10'>
@@ -157,11 +141,15 @@ const Positions = () => {
                         </GridItem>
 
                         <GridItem w='100%' h='10'>
-                            <Text color='gray.500' fontSize='sm'>{singleData.side}</Text>
+                            <Text color={singleData.side == 1 ? 'green.400' : 'red.300'} fontSize='sm'>{singleData.side == 1 ? 'BUY' : 'SELL'}</Text>
                         </GridItem>
 
                         <GridItem w='100%' h='10'>
                             <Text color='gray.500' fontSize='sm'>{singleData.buyQty}</Text>
+                        </GridItem>
+
+                        <GridItem w='100%' h='10'>
+                            <Text color='gray.500' fontSize='sm'>{singleData.sellQty}</Text>
                         </GridItem>
 
                         <GridItem w='100%' h='10'>
@@ -185,10 +173,10 @@ const Positions = () => {
                                     size='sm'
                                 />
                                 <MenuList>
-                                    <MenuItem icon={<RepeatIcon />} command='⌘⇧N'>
+                                    <MenuItem icon={<RepeatIcon />} command='⌘⇧N' onClick={() => handleModifyTrade(singleData.id)} >
                                         Modify Trade
                                     </MenuItem>
-                                    <MenuItem icon={<EditIcon />} command='⌘O'>
+                                    <MenuItem icon={<EditIcon />} command='⌘O' onClick={onOpen} >
                                         Exit Trade
                                     </MenuItem>
                                 </MenuList>
@@ -196,8 +184,35 @@ const Positions = () => {
                         </GridItem>
 
                         {/* <Text color='gray.500' fontSize='sm'>Symbol: </Text> */}
+                        <AlertDialog
+                            isOpen={isOpen}
+                            leastDestructiveRef={cancelRef}
+                            onClose={onClose}
+                        >
+                            <AlertDialogOverlay>
+                                <AlertDialogContent>
+                                    <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                                        Exit Trade
+                                    </AlertDialogHeader>
+
+                                    <AlertDialogBody>
+                                        Are you sure? You can't undo this action afterwards.
+                                    </AlertDialogBody>
+
+                                    <AlertDialogFooter>
+                                        <Button ref={cancelRef} onClick={onClose}>
+                                            Cancel
+                                        </Button>
+                                        <Button colorScheme='red' onClick={() => { handleExitTrade(singleData.id); onClose() }} ml={3}>
+                                            Confirm
+                                        </Button>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                            </AlertDialogOverlay>
+                        </AlertDialog>
 
                     </Grid>
+                )
                 )
             }
         </div>

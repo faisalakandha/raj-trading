@@ -3,11 +3,12 @@ import './App.css';
 import Watchlist from './Views/Watchlist/Watchlist';
 import Positions from './Views/Positions/Positions';
 import PAndL from './Views/P&L/PAndL';
-import { extendTheme, ChakraProvider, Box, Spinner, Center, useDisclosure } from '@chakra-ui/react';
+import { extendTheme, ChakraProvider, Box, Spinner, Center } from '@chakra-ui/react';
 import LoginPage from './Views/LoginPage/LoginPage';
 import { useEffect, useState } from 'react';
 import Orders from './Views/Orders/Orders';
 import TradeOrderBox from './Views/OrderBox/TradeOrderBox';
+import axios from 'axios';
 
 const colors = {
   brand: {
@@ -154,12 +155,22 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(true);
 
-  const [buyClicked, setBuyClicked] = useState({
-    status: true,
-    data: []
-  });
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  // const [buyClicked, setBuyClicked] = useState({
+  //   status: true,
+  //   data: []
+  // });
 
+  const [side, setSide] = useState(1);
+
+  const [modifyOrder, setModifyOrder] = useState(false);
+
+  const [positions, setPositions] = useState([]);
+
+  const [overAll, setOverAll] = useState({});
+
+  const [id, setId] = useState('');
+
+  const [symbol, setSymbol] = useState("");
 
   window.electron.ipcRenderer.DbChange((_event, value) => {
     console.log("DB Change Value === ", value);
@@ -167,11 +178,11 @@ const Home = () => {
     console.log("My Result is true !");
   });
 
-  window.electron.ipcRenderer.OrderUpdate((_event, value) => {
-    console.log("Data Realtime From Electron ", value);
-  })
+  // window.electron.ipcRenderer.OrderUpdate((_event, value) => {
+  //   console.table("Data Realtime From Electron ", value);
+  // })
 
-  window.electron.ipcRenderer.MessageFromRenderer("I am renderer");
+  // window.electron.ipcRenderer.MessageFromRenderer("I am renderer");
 
   useEffect(() => {
     if (result === false) {
@@ -179,6 +190,47 @@ const Home = () => {
       setLoading(result);
     }
   }, [result, setResult]);
+
+  useEffect(() => {
+    const url2 = 'http://localhost:8080/set-appId-access';
+    reqBody = {
+      'id': '1'
+    };
+
+    axios.post(url2, reqBody).then((res) => {
+      console.log(res);
+    })
+      .catch((e) => {
+        console.log(e);
+      })
+
+    setInterval(() => {
+      axios.get('http://localhost:8080/get-positions')
+        .then(function (response) {
+          //console.log(response.data.success);
+          setPositions(response.data.success.netPositions);
+          setOverAll(response.data?.success.overall);
+        })
+        .catch(function (error) {
+          if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+          } else if (error.request) {
+            // The request was made but no response was received
+            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+            // http.ClientRequest in node.js
+            console.log(error.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log('Error', error.message);
+          }
+          console.log(error.config);
+        });
+    }, 800);
+  }, []);
 
   return (
     <div className="App">
@@ -191,20 +243,20 @@ const Home = () => {
           <Box>
             <div className="AppContainer">
               <Box bgColor={'white'} className="LeftView">
-                <Watchlist />
+                <Watchlist setSymbol={setSymbol} setSide={setSide} />
               </Box>
               <div className="RightView">
                 <div className="TopRightView">
                   <Box bgColor={'white'} className="Positions">
-                    <Positions />
+                    <Positions modifyOrder={modifyOrder} setModifyOrder={setModifyOrder} positions={positions} setPositions={setPositions} id={id} setId={setId} />
                   </Box>
                 </div>
                 <div className="BottomRightView">
                   <Box bgColor={'white'} className="Orders">
-                    <TradeOrderBox buyClicked={buyClicked} setBuyClicked={setBuyClicked} isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+                    <TradeOrderBox modifyOrder={modifyOrder} setModifyOrder={setModifyOrder} id={id} setId={setId} symbol={symbol} setSymbol={setSymbol} side={side} setSide={setSide} />
                   </Box>
                   <Box bgColor={'white'} className="PandL">
-                    <PAndL />
+                    <PAndL overAll={overAll} setOverAll={setOverAll} />
                   </Box>
                 </div>
               </div>
