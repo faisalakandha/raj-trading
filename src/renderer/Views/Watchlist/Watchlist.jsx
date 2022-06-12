@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Input, Button, Heading, Stack, Tooltip, useDisclosure, Box, ScaleFade, Text, Spinner, Center, useToast } from '@chakra-ui/react';
 import TradeOrderBox from '../OrderBox/TradeOrderBox';
 import axios from 'axios';
+import { AddIcon, DeleteIcon } from '@chakra-ui/icons';
 
 const Watchlist = ({ setSide, setSymbol }) => {
     const [rawWatclistData, setRawWatchlistData] = useState([]);
@@ -10,7 +11,7 @@ const Watchlist = ({ setSide, setSymbol }) => {
     const [multiSavedTrade, setMultiSavedTrade] = useState([]);
     const [isShown, setIsShown] = useState(null);
     const [isShown2, setIsShown2] = useState(null);
-    const [notFocused, setNotFocused] = useState({ display: 'none' });
+    const [notFocused, setNotFocused] = useState({ display: 'block' });
     // const [buyClicked, setBuyClicked] = useState({
     //     status: false,
     //     data: []
@@ -20,59 +21,11 @@ const Watchlist = ({ setSide, setSymbol }) => {
 
     const toast = useToast();
 
-
-    const fakeWatchListData = [
-        // {
-        //     id: '1',
-        //     name: 'Sample1',
-        //     tag: 'sq',
-        //     price: '20',
-        //     percentage: '10',
-        // },
-
-        {
-            "_id": "626ce9114c3c339be75f907e",
-            "scode": 539437,
-            "name": "IDFC FIRST BANK LIMITED",
-            "acode": "IDBL"
-        },
-        {
-            "_id": "626ce9114c3c339be75f907b",
-            "scode": 539957,
-            "name": "Mahanagar Gas Limited",
-            "acode": "MNGL"
-        },
-        {
-            "_id": "626ce9114c3c339be75f907c",
-            "scode": 540065,
-            "name": "RBL Bank Limited",
-            "acode": "RBLB"
-        },
-        {
-            "_id": "626ce9114c3c339be75f9082",
-            "scode": 535789,
-            "name": "INDIABULLS HOUSING FINANCE LIMITED",
-            "acode": "IBHF"
-        },
-        {
-            "_id": "626ce9114c3c339be75f9083",
-            "scode": 507685,
-            "name": "WIPRO LTD.",
-            "acode": "WIPR"
-        },
-        {
-            "_id": "626ce9114c3c339be75f9088",
-            "scode": 500300,
-            "name": "GRASIM INDUS",
-            "acode": "GRSM"
-        },
-    ];
-
     useEffect(() => {
-        axios.get('http://localhost:8080/api/get-instruments')
+        axios.get('http://localhost:8080/get-symbols-from-watchlist')
             .then(function (response) {
                 console.log(response.data);
-                setRawWatchlistData(response.data);
+                setSavedTrade(response.data);
             })
             .catch(function (error) {
                 if (error.response) {
@@ -92,22 +45,24 @@ const Watchlist = ({ setSide, setSymbol }) => {
                 }
                 console.log(error.config);
             });
-    }, [])
+    }, [setSavedTrade, setWatchlistData])
 
-    function containsObject(obj, list) {
-        var i;
-        for (i = 0; i < list.length; i++) {
-            if (list[i][0] === obj[0]) {
-                return true;
+    function containsObject(singleData, list) {
+        let flag = false;
+        let objSymbol = singleData[4] + ':' + singleData[1] + '-' + singleData[2];
+        console.log("OBJ SYMBOL ", objSymbol);
+        list.map((singleList) => {
+            if (singleList.symbol === objSymbol) {
+                console.log("Single Symbol ===== ", singleList.symbol === objSymbol);
+                flag = true;
             }
-        }
-
-        return false;
+        })
+        return flag;
     }
 
     const mergeArrayOfObjects = (original, newdata, selector = '_id') => {
         newdata.forEach(dat => {
-            const foundIndex = original.findIndex(ori => ori[0] == dat[0]);
+            const foundIndex = original.findIndex(ori => ori._id == dat._id);
             if (foundIndex >= 0) original.splice(foundIndex, 1, dat);
             else original.push(dat);
         });
@@ -121,38 +76,88 @@ const Watchlist = ({ setSide, setSymbol }) => {
         console.log(e.target.localName);
         console.log(e.target.id);
         if (e.target.localName === "div" && e.target.id === 'mainDiv') {
-            setNotFocused({ display: 'block' });
-            const result = mergeArrayOfObjects(savedTrade, multiSavedTrade, '_id');
-            console.log(result);
-            if (result !== 0) {
-                setSavedTrade(result);
-            }
+
+            // const result = mergeArrayOfObjects(savedTrade, multiSavedTrade, '_id');
+            // console.log(result);
+            // if (result !== 0) {
+            //     setSavedTrade(result);
+            // }
+
+            axios.get('http://localhost:8080/get-symbols-from-watchlist')
+                .then(function (response) {
+                    console.log(response.data);
+                    setSavedTrade(response.data);
+                })
+                .catch(function (error) {
+                    if (error.response) {
+                        // The request was made and the server responded with a status code
+                        // that falls out of the range of 2xx
+                        console.log(error.response.data);
+                        console.log(error.response.status);
+                        console.log(error.response.headers);
+                    } else if (error.request) {
+                        // The request was made but no response was received
+                        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                        // http.ClientRequest in node.js
+                        console.log(error.request);
+                    } else {
+                        // Something happened in setting up the request that triggered an Error
+                        console.log('Error', error.message);
+                    }
+                    console.log(error.config);
+                });
+
             setWatchlistData([]);
             console.log(savedTrade);
+
+            setNotFocused({ display: 'block' });
         }
     }
 
     const handleAddBtn = (data) => {
 
-        console.log(savedTrade, multiSavedTrade);
+        //console.log(savedTrade, multiSavedTrade);
 
-        const result = [...savedTrade, ...multiSavedTrade];
+        //const result = [...savedTrade, ...multiSavedTrade];
 
-        console.log("MERGED ARRAYS :::::   ", result);
+        //console.log("MERGED ARRAYS :::::   ", result);
 
-        if (!containsObject(data, result)) {
+        if (!containsObject(data, savedTrade)) {
             //console.log(savedTrade.includes(data));
             console.log('My Bug: ', savedTrade);
-            setSavedTrade([...result, data]);
+            //setSavedTrade([...result, data]);
             //console.log(data);
             //console.log(savedTrade);
-            toast({
-                title: 'Trade Added To Watchlist',
-                description: "Success",
-                status: 'success',
-                duration: 1500,
-                isClosable: true,
+
+            const url = 'http://localhost:8080/save-symbols-to-watchlist';
+
+            const reqBodyExit = {
+                symbol: data[4] + ':' + data[1] + '-' + data[2],
+                code: data[3],
+                ltp: data[10]
+            }
+
+            axios.post(url, reqBodyExit).then((res) => {
+                console.log(res.data);
+                //const message = res.data.success.message;
+                toast({
+                    title: 'Trade Added To Watchlist',
+                    description: "Success",
+                    status: 'success',
+                    duration: 1500,
+                    isClosable: true,
+                })
+            }).catch((e) => {
+                console.log(e);
+                toast({
+                    title: 'Error Adding Trade To Database',
+                    description: "Error",
+                    status: 'error',
+                    duration: 1500,
+                    isClosable: true,
+                })
             })
+
             setWatchlistData([]);
             setNotFocused({ display: 'block' });
         }
@@ -165,18 +170,64 @@ const Watchlist = ({ setSide, setSymbol }) => {
                 isClosable: true,
             })
         }
+
+        axios.get('http://localhost:8080/get-symbols-from-watchlist')
+            .then(function (response) {
+                console.log(response.data);
+                setSavedTrade(response.data);
+            })
+            .catch(function (error) {
+                if (error.response) {
+                    // The request was made and the server responded with a status code
+                    // that falls out of the range of 2xx
+                    console.log(error.response.data);
+                    console.log(error.response.status);
+                    console.log(error.response.headers);
+                } else if (error.request) {
+                    // The request was made but no response was received
+                    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                    // http.ClientRequest in node.js
+                    console.log(error.request);
+                } else {
+                    // Something happened in setting up the request that triggered an Error
+                    console.log('Error', error.message);
+                }
+                console.log(error.config);
+            });
     }
 
     const handleMultipleAddBtn = (data) => {
         setNotFocused({ display: 'none' });
-        if (!containsObject(data, multiSavedTrade)) {
-            setMultiSavedTrade([...multiSavedTrade, data]);
-            toast({
-                title: 'Trade Added To Watchlist',
-                description: "Success",
-                status: 'success',
-                duration: 1500,
-                isClosable: true,
+        console.log("CONTAINS OBJ +++ ", containsObject(data, savedTrade));
+        if (!containsObject(data, savedTrade)) {
+
+            const url = 'http://localhost:8080/save-symbols-to-watchlist';
+
+            const reqBodyExit = {
+                symbol: data[4] + ':' + data[1] + '-' + data[2],
+                code: data[3],
+                ltp: data[10]
+            }
+
+            axios.post(url, reqBodyExit).then((res) => {
+                console.log(res.data);
+                //const message = res.data.success.message;
+                toast({
+                    title: 'Trade Added To Watchlist',
+                    description: "Success",
+                    status: 'success',
+                    duration: 1500,
+                    isClosable: true,
+                })
+            }).catch((e) => {
+                console.log(e);
+                toast({
+                    title: 'Error Adding Trade To Database',
+                    description: "Error",
+                    status: 'error',
+                    duration: 1500,
+                    isClosable: true,
+                })
             })
         }
         else {
@@ -188,19 +239,82 @@ const Watchlist = ({ setSide, setSymbol }) => {
                 isClosable: true,
             })
         }
+        axios.get('http://localhost:8080/get-symbols-from-watchlist')
+            .then(function (response) {
+                console.log(response.data);
+                setSavedTrade(response.data);
+            })
+            .catch(function (error) {
+                if (error.response) {
+                    // The request was made and the server responded with a status code
+                    // that falls out of the range of 2xx
+                    console.log(error.response.data);
+                    console.log(error.response.status);
+                    console.log(error.response.headers);
+                } else if (error.request) {
+                    // The request was made but no response was received
+                    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                    // http.ClientRequest in node.js
+                    console.log(error.request);
+                } else {
+                    // Something happened in setting up the request that triggered an Error
+                    console.log('Error', error.message);
+                }
+                console.log(error.config);
+            });
     }
 
     const handleDeleteBtn = (id) => {
-        const updatedSavedTrade = savedTrade.filter((item => item[0] !== id));
-        const updatedMultiSavedTrade = multiSavedTrade.filter((item => item[0] !== id))
-        setSavedTrade(updatedSavedTrade);
-        setMultiSavedTrade(updatedMultiSavedTrade);
-        toast({
-            title: 'Trade Deleted From Watchlist',
-            description: "Deleted",
-            status: 'error',
-            duration: 1500,
-            isClosable: true,
+        const url = 'http://localhost:8080/remove-symbols-from-watchlist';
+
+        const reqBodyExit = {
+            id: id
+        }
+
+        axios.post(url, reqBodyExit).then((res) => {
+            console.log(res.data);
+            //const message = res.data.success.message;
+
+            axios.get('http://localhost:8080/get-symbols-from-watchlist')
+                .then(function (response) {
+                    console.log(response.data);
+                    setSavedTrade(response.data);
+                })
+                .catch(function (error) {
+                    if (error.response) {
+                        // The request was made and the server responded with a status code
+                        // that falls out of the range of 2xx
+                        console.log(error.response.data);
+                        console.log(error.response.status);
+                        console.log(error.response.headers);
+                    } else if (error.request) {
+                        // The request was made but no response was received
+                        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                        // http.ClientRequest in node.js
+                        console.log(error.request);
+                    } else {
+                        // Something happened in setting up the request that triggered an Error
+                        console.log('Error', error.message);
+                    }
+                    console.log(error.config);
+                });
+
+            toast({
+                title: 'Trade Deleted',
+                description: "Trade Deleted From Watchlist",
+                status: 'error',
+                duration: 1500,
+                isClosable: true,
+            })
+        }).catch((e) => {
+            console.log(e);
+            toast({
+                title: 'Error',
+                description: "Error Deleting Trade",
+                status: 'error',
+                duration: 1500,
+                isClosable: true,
+            })
         })
     }
 
@@ -297,6 +411,15 @@ const Watchlist = ({ setSide, setSymbol }) => {
             setSide(-1);
             setSymbol(singleData[4] + ':' + singleData[1] + '-' + singleData[2]);
         }
+        if (flag === 'BS') {
+            setSide(1);
+            setSymbol(singleData.symbol);
+        }
+        if (flag === 'SS') {
+            // setBuyClicked({ status: false, data: singleData });
+            setSide(-1);
+            setSymbol(singleData.symbol);
+        }
         // onOpen();
     }
 
@@ -320,7 +443,7 @@ const Watchlist = ({ setSide, setSymbol }) => {
                                 onMouseLeave={() => setIsShown(null)}
                             >
                                 <Tooltip label='Click To Add' placement='right'>
-                                    <Box w='95%' style={{ display: 'flex', justifyContent: 'space-evenly', cursor: 'pointer' }}
+                                    <Box w='100%' style={{ display: 'flex', justifyContent: 'space-evenly', cursor: 'pointer' }}
                                         onClick={() => handleAddBtn(singleData)}
                                         bg='whiteAlpha.900'
                                         boxShadow={' rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px'}
@@ -337,8 +460,8 @@ const Watchlist = ({ setSide, setSymbol }) => {
                                             </Tooltip>
                                         </div>
                                         <div style={{ width: '20%' }}>
-                                            <Tooltip label='A-code' placement='top'>
-                                                <Text fontSize='sm' >{singleData[5]}</Text>
+                                            <Tooltip label='LTP' placement='top'>
+                                                <Text fontSize='sm' >{singleData[10]}</Text>
                                             </Tooltip>
                                         </div>
                                     </Box>
@@ -348,13 +471,22 @@ const Watchlist = ({ setSide, setSymbol }) => {
                                     isShown === singleData[0] && (
                                         <ScaleFade unmountOnExit={true} reverse initialScale={0.95} in={isShown}>
                                             <Stack spacing={1} direction={['column', 'row']} align='center' style={{ zIndex: '100' }}>
-                                                <Button colorScheme='blue' size='sm' onClick={() => handleBuySellClicked(singleData, 'B')}>B</Button>
-                                                <Button onClick={() => handleBuySellClicked(singleData, 'S')} bg='orange.300' color='white' size='sm' _hover={{ bg: 'orange.400' }}>S</Button>
-                                                <Button size='sm'>{'->'}</Button>
-                                                <Button size='sm'>=</Button>
-                                                <Button size='sm' colorScheme='green'
-                                                    onClick={() => handleMultipleAddBtn(singleData)}
-                                                >+</Button>
+
+                                                <Tooltip label='BUY' placement='top'>
+                                                    <Button colorScheme='blue' size='sm' onClick={() => handleBuySellClicked(singleData, 'B')}>B</Button>
+                                                </Tooltip>
+
+                                                <Tooltip label='Sell' placement='top'>
+                                                    <Button onClick={() => handleBuySellClicked(singleData, 'S')} bg='orange.300' color='white' size='sm' _hover={{ bg: 'orange.400' }}>S</Button>
+                                                </Tooltip>
+
+                                                {/* <Button size='sm'>{'->'}</Button>
+                                                <Button size='sm'>=</Button> */}
+                                                <Tooltip label='Save Trade' placement='top'>
+                                                    <Button size='sm' colorScheme='green'
+                                                        onClick={() => handleMultipleAddBtn(singleData)}
+                                                    ><AddIcon /></Button>
+                                                </Tooltip>
                                             </Stack>
                                         </ScaleFade>
                                     )
@@ -362,10 +494,10 @@ const Watchlist = ({ setSide, setSymbol }) => {
                             </Box>
                         )
                         :
-                        <div>
+                        <div >
                             {
                                 savedTrade.length === 0 &&
-                                <Text color='gray.400' fontSize='xs'>Empty Watch List, Try Searching</Text>
+                                <Text mt="3rem" color='gray.400' fontSize='xs'>Empty Watch List, Try Adding Trades</Text>
                             }
                         </div>
                 }
@@ -389,14 +521,10 @@ const Watchlist = ({ setSide, setSymbol }) => {
             <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center', marginTop: '5px' }}>
 
                 {
-
-                }
-
-                {
                     savedTrade.length !== 0 ?
 
                         savedTrade.map(singleData =>
-                            <Box w='98%' key={singleData[0]} style={notFocused} onMouseEnter={() => setIsShown2(singleData[0])}
+                            <Box w='88%' key={singleData._id} style={notFocused} onMouseEnter={() => setIsShown2(singleData._id)}
                                 onMouseLeave={() => setIsShown2(null)}
 
                             >
@@ -404,38 +532,48 @@ const Watchlist = ({ setSide, setSymbol }) => {
 
                                     boxShadow={'0 7px 30px -10px rgba(150,170,180,0.5)'} bgColor={'blue.200'} color={'black'} p='10px' mt='10px' borderWidth='0px' borderRadius='lg'
                                 >
-                                    <Box style={{ width: '100%', display: 'flex', justifyContent: 'space-evenly', marginRight: '5px', cursor: 'default' }}
-                                        bg='whiteAlpha.900'
-                                        boxShadow={' rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px'}
-                                        p='10px' mt='10px' mb='10px' borderWidth='0px' borderRadius='md'
-                                    >
-                                        {/* <p>{singleData.name}</p>
-                                        <p>{singleData.percentage}</p> */}
-                                        <div style={{ marginRight: '10px', width: '55%', textAlign: 'left' }}>
-                                            <Tooltip label='Name' placement='top'>
-                                                <Text fontSize='sm' >{singleData[4] + ':' + singleData[1] + '-' + singleData[2]}</Text>
-                                            </Tooltip>
-                                        </div>
-                                        <div style={{ marginRight: '10px', width: '25%' }}>
-                                            <Tooltip label='S-Code' placement='top'>
-                                                <Text fontSize='sm' >{singleData[3]}</Text>
-                                            </Tooltip>
-                                        </div>
-                                        <div style={{ width: '20%' }}>
-                                            <Tooltip label='A-code' placement='top'>
-                                                <Text fontSize='sm' >{singleData[5]}</Text>
-                                            </Tooltip>
-                                        </div>
-                                    </Box>
+                                    <Tooltip label={singleData[8]} placement='right'>
+
+                                        <Box style={{ width: '100%', display: 'flex', justifyContent: 'space-evenly', marginRight: '5px', cursor: 'default' }}
+                                            bg='whiteAlpha.900'
+                                            boxShadow={' rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px'}
+                                            p='10px' mt='10px' mb='10px' borderWidth='0px' borderRadius='md'
+                                        >
+                                            {/* <p>{singleData.name}</p>
+                                            <p>{singleData.percentage}</p> */}
+                                            <div style={{ marginRight: '10px', width: '55%', textAlign: 'left' }}>
+                                                <Tooltip label='Symbol' placement='top'>
+                                                    <Text fontSize='sm' >{singleData.symbol}</Text>
+                                                </Tooltip>
+                                            </div>
+                                            <div style={{ marginRight: '10px', width: '25%' }}>
+                                                <Tooltip label='S-Code' placement='top'>
+                                                    <Text fontSize='sm' >{singleData.code}</Text>
+                                                </Tooltip>
+                                            </div>
+                                            <div style={{ width: '20%' }}>
+                                                <Tooltip label='LTP' placement='top'>
+                                                    <Text fontSize='sm' >{singleData.ltp}</Text>
+                                                </Tooltip>
+                                            </div>
+                                        </Box>
+
+                                    </Tooltip>
                                     {
-                                        isShown2 === singleData[0] &&
+                                        isShown2 === singleData._id &&
                                         <ScaleFade initialScale={0.9} in={isShown2}>
                                             <Stack spacing={1} direction={['column', 'row']} align='center'>
-                                                <Button colorScheme='blue' size='sm' onClick={() => handleBuySellClicked(singleData, 'B')}>B</Button>
-                                                <Button onClick={() => handleBuySellClicked(singleData, 'S')} bg='orange.300' color='white' size='sm' _hover={{ bg: 'orange.400' }}>S</Button>
-                                                <Button size='sm'>{'->'}</Button>
-                                                <Button size='sm'>=</Button>
-                                                <Button size='sm' colorScheme='red' variant='solid' onClick={() => handleDeleteBtn(singleData[0])}>-</Button>
+                                                <Tooltip label='BUY' placement='top'>
+                                                    <Button colorScheme='blue' size='sm' onClick={() => handleBuySellClicked(singleData, 'BS')}>B</Button>
+                                                </Tooltip>
+                                                <Tooltip label='Sell' placement='top'>
+                                                    <Button onClick={() => handleBuySellClicked(singleData, 'SS')} bg='orange.300' color='white' size='sm' _hover={{ bg: 'orange.400' }}>S</Button>
+                                                </Tooltip>
+                                                {/* <Button size='sm'>{'->'}</Button>
+                                                <Button size='sm'>=</Button> */}
+                                                <Tooltip label='Delete Trade' placement='top'>
+                                                    <Button size='sm' colorScheme='red' variant='solid' onClick={() => handleDeleteBtn(singleData._id)}><DeleteIcon /></Button>
+                                                </Tooltip>
                                             </Stack>
                                         </ScaleFade>
                                     }

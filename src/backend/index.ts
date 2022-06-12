@@ -55,13 +55,14 @@ app.get('/get-searched-symbols/:value', async (req, res) => {
 
   axios.get(`https://api.truedata.in/getAllSymbols?segment=all&user=FYERS1806&password=14Qa3p25&search=${req.params.value}`)
     .then(function (response) {
-      console.log(" Get Symbole DATA::::  ", response.data);
+      //console.log(" Get Symbole DATA::::  ", response.data);
       res.status(200).json({ data: response.data });
     })
     .catch(function (error) {
       if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
+        res.status(500).json({ error: error.response.status, data: error.response.data });
         console.log(error.response.data);
         console.log(error.response.status);
         console.log(error.response.headers);
@@ -90,6 +91,87 @@ app.get('/get-positions', async (req, res) => {
   }).catch((e) => {
     res.status(500).json({ error: e })
   });
+});
+
+app.get('/get-symbols-from-watchlist', async (req, res) => {
+
+  async function getFromWatchList() {
+
+    // new db.Session({
+    //   status: AuthToken.s,
+    //   access: AuthToken.access_token,
+    // });
+
+    try {
+      const Watchlist = db.Watchlist;
+
+      Watchlist.find({}, function (err, lists) {
+        var listMap = [];
+
+        lists.forEach(function (list) {
+          listMap.push(list);
+        });
+
+        res.status(200).send(listMap);
+      });
+
+    } catch (e) {
+      res.status(500).send(e);
+    }
+  }
+
+  getFromWatchList();
+
+});
+
+app.post('/save-symbols-to-watchlist', async (req, res) => {
+
+  async function insertWatchList() {
+
+    // new db.Session({
+    //   status: AuthToken.s,
+    //   access: AuthToken.access_token,
+    // });
+
+    try {
+      const watchlist = await new db.Watchlist(req.body);
+
+      await watchlist.save();
+      // const user = new User({ name: 'Ahsan', age: 26 });
+      // await user.save()
+      console.log(watchlist);
+      res.send(watchlist);
+
+    } catch (e) {
+      res.send(e);
+    }
+  }
+
+  insertWatchList();
+
+});
+
+app.post('/remove-symbols-from-watchlist', async (req, res) => {
+
+  async function removeFromWatchList() {
+
+    // new db.Session({
+    //   status: AuthToken.s,
+    //   access: AuthToken.access_token,
+    // });
+
+    try {
+      const watchlist = await db.Watchlist.deleteOne({ _id: req.body.id });
+      await watchlist.save();
+      console.log(watchlist);
+      res.status(200).send({ success: 'Trade Removed From Watchlist' });
+    } catch (e) {
+      res.status(200).send(e);
+    }
+  }
+
+  removeFromWatchList();
+
 });
 
 app.post('/place-order', async (req, res) => {
