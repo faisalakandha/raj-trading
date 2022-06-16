@@ -31,8 +31,8 @@
     ]
   },
   "build": {
-    "productName": "ElectronReact",
-    "appId": "org.erb.ElectronReact",
+    "productName": "RajTradingApp",
+    "appId": "org.erb.RajTRading",
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",
     "files": [

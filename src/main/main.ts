@@ -156,10 +156,10 @@ app
       console.log(err);
     }
 
-    db.Session.watch().on('change', (data) => {
-      console.log(data);
-      mainWindow.webContents.send('event:dbChange', 'DBChange');
-    });
+    // db.Session.watch().on('change', (data) => {
+    //   console.log(data);
+    //   mainWindow.webContents.send('event:dbChange', 'DBChange');
+    // });
 
     createWindow();
     mainWindow?.maximize();
@@ -196,22 +196,25 @@ const reqBody = {
 };
 
 ipcMain.on('event:messageFromRenderer', (event, title) => {
-  AuthSession.findOne().sort({ field: 'asc', _id: -1 }).limit(1)
-    .then(data => {
-      console.log('DB DATA FROM place-order API: ', data.access);
+  // AuthSession.findOne().sort({ field: 'asc', _id: -1 }).limit(1)
+  //   .then(data => {
+  //     console.log('DB DATA FROM place-order API: ', data.access);
 
-      fyers.setAccessToken(data.access);
-      const reqBody2 = {
-        symbol: ["NSE:JINDALSTEL-EQ"],
+  //     fyers.setAccessToken(data.access);
+  //     const reqBody2 = {
+  //       symbol: ["NSE:JINDALSTEL-EQ"],
 
-        dataType: 'symbolUpdate'
+  //       dataType: 'symbolUpdate'
 
-      }
+  //     }
 
-      fyers.fyers_connect(reqBody2, function (data) {
-        console.log('Market Data: ', data)
-        //write your code here
-        mainWindow?.webContents.send('event:orderData', data);
-      })
-    })
+  //     fyers.fyers_connect(reqBody2, function (data) {
+  //       console.log('Market Data: ', data)
+  //       //write your code here
+  //       mainWindow?.webContents.send('event:orderData', data);
+  //     })
+  //   })
+
+
+
 })

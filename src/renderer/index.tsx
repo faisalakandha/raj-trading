@@ -9,6 +9,7 @@ root.render(<App />);
 window.electron.ipcRenderer.once('ipc-example', (arg) => {
   // eslint-disable-next-line no-console
   console.log(arg);
+  console.log("IPC WORKING ON THE INDEX PAGE");
 });
 window.electron.ipcRenderer.myPing();
 

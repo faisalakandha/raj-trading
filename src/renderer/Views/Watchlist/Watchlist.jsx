@@ -22,7 +22,7 @@ const Watchlist = ({ setSide, setSymbol }) => {
     const toast = useToast();
 
     useEffect(() => {
-        axios.get('http://localhost:8080/get-symbols-from-watchlist')
+        axios.get('http://localhost:8091/get-symbols-from-watchlist')
             .then(function (response) {
                 console.log(response.data);
                 setSavedTrade(response.data);
@@ -45,7 +45,40 @@ const Watchlist = ({ setSide, setSymbol }) => {
                 }
                 console.log(error.config);
             });
-    }, [setSavedTrade, setWatchlistData])
+    }, [setSavedTrade, setWatchlistData]);
+
+    // useEffect(()=>{
+    //     if(savedTrade.length !== 0){
+    //         savedTrade.map(singleData => {
+    //             axios.get(`http://localhost:8091/get-searched-symbols/${singleData.symbol}`)
+    //             .then(function (response) {
+    //                 //console.log(response);
+    //                 if (response !== undefined) {
+    //                     console.log("GET SEARCHED SYMBOLS  :::::   ", response.data.data.Records);
+    //                     axios.post()
+    //                 }
+    //             })
+    //             .catch(function (error) {
+    //                 if (error.response) {
+    //                     // The request was made and the server responded with a status code
+    //                     // that falls out of the range of 2xx
+    //                     console.log(error.response.data);
+    //                     console.log(error.response.status);
+    //                     console.log(error.response.headers);
+    //                 } else if (error.request) {
+    //                     // The request was made but no response was received
+    //                     // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+    //                     // http.ClientRequest in node.js
+    //                     console.log(error.request);
+    //                 } else {
+    //                     // Something happened in setting up the request that triggered an Error
+    //                     console.log('Error', error.message);
+    //                 }
+    //                 console.log(error.config);
+    //             });
+    //         })
+    //     }
+    // }, [])
 
     function containsObject(singleData, list) {
         let flag = false;
@@ -75,7 +108,7 @@ const Watchlist = ({ setSide, setSymbol }) => {
         console.log(e.currentTarget);
         console.log(e.target.localName);
         console.log(e.target.id);
-        if (e.target.localName === "div" && e.target.id === 'mainDiv') {
+        if ((e.target.localName === "div" && e.target.id === 'mainDiv') || (e.target.localName === "p" && e.target.id === 'textView')) {
 
             // const result = mergeArrayOfObjects(savedTrade, multiSavedTrade, '_id');
             // console.log(result);
@@ -83,7 +116,7 @@ const Watchlist = ({ setSide, setSymbol }) => {
             //     setSavedTrade(result);
             // }
 
-            axios.get('http://localhost:8080/get-symbols-from-watchlist')
+            axios.get('http://localhost:8091/get-symbols-from-watchlist')
                 .then(function (response) {
                     console.log(response.data);
                     setSavedTrade(response.data);
@@ -129,7 +162,7 @@ const Watchlist = ({ setSide, setSymbol }) => {
             //console.log(data);
             //console.log(savedTrade);
 
-            const url = 'http://localhost:8080/save-symbols-to-watchlist';
+            const url = 'http://localhost:8091/save-symbols-to-watchlist';
 
             const reqBodyExit = {
                 symbol: data[4] + ':' + data[1] + '-' + data[2],
@@ -171,7 +204,7 @@ const Watchlist = ({ setSide, setSymbol }) => {
             })
         }
 
-        axios.get('http://localhost:8080/get-symbols-from-watchlist')
+        axios.get('http://localhost:8091/get-symbols-from-watchlist')
             .then(function (response) {
                 console.log(response.data);
                 setSavedTrade(response.data);
@@ -201,7 +234,7 @@ const Watchlist = ({ setSide, setSymbol }) => {
         console.log("CONTAINS OBJ +++ ", containsObject(data, savedTrade));
         if (!containsObject(data, savedTrade)) {
 
-            const url = 'http://localhost:8080/save-symbols-to-watchlist';
+            const url = 'http://localhost:8091/save-symbols-to-watchlist';
 
             const reqBodyExit = {
                 symbol: data[4] + ':' + data[1] + '-' + data[2],
@@ -239,7 +272,7 @@ const Watchlist = ({ setSide, setSymbol }) => {
                 isClosable: true,
             })
         }
-        axios.get('http://localhost:8080/get-symbols-from-watchlist')
+        axios.get('http://localhost:8091/get-symbols-from-watchlist')
             .then(function (response) {
                 console.log(response.data);
                 setSavedTrade(response.data);
@@ -265,7 +298,7 @@ const Watchlist = ({ setSide, setSymbol }) => {
     }
 
     const handleDeleteBtn = (id) => {
-        const url = 'http://localhost:8080/remove-symbols-from-watchlist';
+        const url = 'http://localhost:8091/remove-symbols-from-watchlist';
 
         const reqBodyExit = {
             id: id
@@ -275,7 +308,7 @@ const Watchlist = ({ setSide, setSymbol }) => {
             console.log(res.data);
             //const message = res.data.success.message;
 
-            axios.get('http://localhost:8080/get-symbols-from-watchlist')
+            axios.get('http://localhost:8091/get-symbols-from-watchlist')
                 .then(function (response) {
                     console.log(response.data);
                     setSavedTrade(response.data);
@@ -362,7 +395,7 @@ const Watchlist = ({ setSide, setSymbol }) => {
         if (value.length !== 0) {
             //setWatchlistData(result);
 
-            axios.get(`http://localhost:8080/get-searched-symbols/${value}`)
+            axios.get(`http://localhost:8091/get-searched-symbols/${value}`)
                 .then(function (response) {
                     //console.log(response);
                     if (response !== undefined) {
@@ -510,7 +543,8 @@ const Watchlist = ({ setSide, setSymbol }) => {
                 notFocused.display === 'none' &&
 
                 <Tooltip label='Click To View Saved Trades' placement='bottom'>
-                    <div id={'mainDiv'} onClick={(e) => handleWatchlistClick(e)} style={{ height: '60%', cursor: 'pointer' }}>
+                    <div id={'mainDiv'} onClick={(e) => handleWatchlistClick(e)} style={{ height: '70%', cursor: 'pointer' }}>
+                        <Text id={'textView'} mt='1.5rem' onClick={(e) => handleWatchlistClick(e)} color='gray.400' > View Saved Trades </Text>
                         {/* {
                             savedTrade.length === 0 &&
                             <Heading as='h6' size='sm'>No Trades Saved</Heading>

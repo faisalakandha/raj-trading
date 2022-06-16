@@ -174,6 +174,29 @@ app.post('/remove-symbols-from-watchlist', async (req, res) => {
 
 });
 
+app.post('/update-symbols-from-watchlist', async (req, res) => {
+
+  async function updateFromWatchList() {
+
+    // new db.Session({
+    //   status: AuthToken.s,
+    //   access: AuthToken.access_token,
+    // });
+
+    try {
+      const watchlist = await db.Watchlist.findByIdAndUpdate(req.body.id, req.body.data, { upsert: true });
+      await watchlist.save();
+      console.log(watchlist);
+      res.status(200).send({ success: 'Stock Updated on the Watchlist' });
+    } catch (e) {
+      res.status(200).send(e);
+    }
+  }
+
+  updateFromWatchList();
+
+});
+
 app.post('/place-order', async (req, res) => {
 
   const AuthSession = db.mongoose.model('session');
@@ -267,7 +290,7 @@ app.post('/exit-order', async (req, res) => {
 // Routes
 require('./routes/routes')(app);
 // set port, listen for requests
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8091;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });

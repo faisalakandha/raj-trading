@@ -92,7 +92,7 @@ const TradeOrderBox = ({ side, setSide, modifyOrder, setModifyOrder, id, setId, 
         console.log(reqBodyModify);
 
         if (modifyOrder === false) {
-            const url = 'http://localhost:8080/place-order'
+            const url = 'http://localhost:8091/place-order'
 
             axios.post(url, reqBody).then((res) => {
                 console.log(res.data);
@@ -116,7 +116,7 @@ const TradeOrderBox = ({ side, setSide, modifyOrder, setModifyOrder, id, setId, 
             })
         }
         if (modifyOrder === true) {
-            const url2 = 'http://localhost:8080/modify-order'
+            const url2 = 'http://localhost:8091/modify-order'
 
             axios.post(url2, reqBodyModify).then((res) => {
                 console.log(res.data.success.msg);
@@ -157,6 +157,7 @@ const TradeOrderBox = ({ side, setSide, modifyOrder, setModifyOrder, id, setId, 
         //setStopLoss('');
         setId('');
         setModifyOrder(false);
+        setSide(1);
     }
 
     const parse = (val) => val.replace(/^\$/, '');

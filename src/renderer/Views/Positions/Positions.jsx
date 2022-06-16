@@ -38,7 +38,7 @@ const Positions = ({ modifyOrder, setModifyOrder, positions, setPositions, id, s
         onOpen()
         console.log(isOpen, cancelRef, "IDDD: ", singleId);
 
-        const url = 'http://localhost:8080/exit-order';
+        const url = 'http://localhost:8091/exit-order';
 
         const reqBodyExit = {
 
@@ -127,7 +127,7 @@ const Positions = ({ modifyOrder, setModifyOrder, positions, setPositions, id, s
 
                     singleData.buyQty !== singleData.sellQty &&
 
-                    <Grid templateColumns='repeat(10, 1fr)' gap={6} margin='2vh' maxWidth='100%' paddingLeft='5vh' paddingRight='5vh' paddingTop='2vh' textAlign='left' className='boxShadow' borderRadius='12px'>
+                    <Grid templateColumns='repeat(10, 1fr)' gap={6} margin='2vh' maxWidth='100%' paddingLeft='5vh' paddingRight='5vh' paddingTop='2vh' textAlign='left' className='boxShadow' borderRadius='12px' key={singleData.id} >
                         <GridItem w='15vh' h='10'>
                             <Text color='gray.500' fontSize='sm'>{singleData.symbol}</Text>
                         </GridItem>

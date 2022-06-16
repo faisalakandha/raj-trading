@@ -8,46 +8,48 @@ const LoginPage = ({ login, setLogin }) => {
 
     const toast = useToast();
 
+    async function handleLoginClick() {
+        const test = await window.electron.ipcRenderer.OpenAuthWindow("Renderer: Auth Request..");
+        if (test === true) {
+            toast({
+                title: 'Login Success!',
+                description: "Welcome.",
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+            })
+            setLogin(true);
+        }
+        else if (test === false) {
+            toast({
+                title: 'Login failed!',
+                description: "Try Again.",
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            })
+            setLogin(false);
+        }
+        else {
+            toast({
+                title: 'Login failed!',
+                description: "Try Again.",
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            })
+            setLogin(false);
+        }
+    }
+
     return (
         <div className="BackgroundContainer">
             <img src={backroundImage} alt="" />
             <button
-                onClick={ async () => {
-                   const test = await window.electron.ipcRenderer.OpenAuthWindow("Renderer: Auth Request..");
-                    if (test === true) {
-                        toast({
-                            title: 'Login Success!',
-                            description: "Welcome.",
-                            status: 'success',
-                            duration: 3000,
-                            isClosable: true,
-                        })
-                        setLogin(true);
-                    }
-                    else if (test === false) {
-                        toast({
-                            title: 'Login failed!',
-                            description: "Try Again.",
-                            status: 'error',
-                            duration: 3000,
-                            isClosable: true,
-                        })
-                        setLogin(false);
-                    }
-                    else {
-                        toast({
-                            title: 'Login failed!',
-                            description: "Try Again.",
-                            status: 'error',
-                            duration: 3000,
-                            isClosable: true,
-                        })
-                        setLogin(false);
-                    }
-                }}
+                onClick={() => handleLoginClick()}
                 className="backgroundBtn"
             >
-                Login
+                App Login
             </button>
         </div>
     );

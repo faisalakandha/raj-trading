@@ -1,10 +1,10 @@
 {
-  "name": "Raj Trading Platform",
-  "version": "1.0",
+  "name": "raj-trading",
+  "version": "1.0.0",
   "description": "A trading platform on top of Fyers Api",
   "main": "./dist/main/main.js",
   "author": {
-    "name": "Faisal, Siam & Rana"
+    "name": "Faisal, Sium & Rana"
   },
   "scripts": {
     "electron-rebuild": "node -r ts-node/register ../../.erb/scripts/electron-rebuild.js",

@@ -1,19 +1,18 @@
 {
-  "dbInfo":
-    {
-        "host":"cluster0.cd8qa.mongodb.net",
-        "database":"rajTrading",
-        "username":"faisalakandha",
-        "password":"faisalakandha123",
-        "port":"",
-        "dburi":"mongodb+srv://faisalakandha:faisalakandha123@cluster0.cd8qa.mongodb.net/rajTrading?retryWrites=true&w=majority"
-    },
-    "serverInfo":{
-        "port": 5000
-    },
-    "fyersInfo":{
-      "fyId": "FMR00CRGAK-100",
-      "fyUri":"http://localhost:3000/",
-      "authUri":"https://api.fyers.in/api/v2/generate-authcode?client_id=FMR00CRGAK-100&redirect_uri=http://localhost:3000/&response_type=code&state=sample_state"
-    }
+  "dbInfo": {
+    "host": "cluster0.cd8qa.mongodb.net",
+    "database": "rajTrading",
+    "username": "faisalakandha",
+    "password": "faisalakandha123",
+    "port": "",
+    "dburi": "mongodb+srv://faisalakandha:faisalakandha123@cluster0.cd8qa.mongodb.net/rajTrading?retryWrites=true&w=majority"
+  },
+  "serverInfo": {
+    "port": 5030
+  },
+  "fyersInfo": {
+    "fyId": "FMR00CRGAK-100",
+    "fyUri": "http://localhost:3070/",
+    "authUri": "https://api.fyers.in/api/v2/generate-authcode?client_id=FMR00CRGAK-100&redirect_uri=http://localhost:3070/&response_type=code&state=sample_state"
+  }
 }

@@ -4,7 +4,9 @@ import fy from '../api/index';
 
 import db from '../backend/models/index';
 
-const  nconf = require('nconf');
+import nconf from 'nconf';
+
+import appConfig from '../../appconfig.json';
 
 nconf.argv().env().file({ file: 'appconfig.json' });
 
@@ -24,13 +26,13 @@ fy.fyers.setAppId(fy.fyId);
 fy.fyers.setRedirectUrl(fy.url);
 
 export default async function AuthWindow() {
-  const authUrl = authUri;
+  const authUrl = appConfig.fyersInfo.authUri;
 
   const authWindow = new BrowserWindow({
     width: 800,
     height: 600,
-    show: false,
-    'node-integration': false,
+    show: true,
+    'node-integration': true,
   });
 
   authWindow.loadURL(authUrl);
@@ -54,8 +56,8 @@ export default async function AuthWindow() {
           return response;
         })
         .catch(function () {
-          return;
           console.log('Promise Rejected');
+          return;
         })
 
         .then((AuthToken) => {

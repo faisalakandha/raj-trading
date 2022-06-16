@@ -172,11 +172,11 @@ const Home = () => {
 
   const [symbol, setSymbol] = useState("");
 
-  window.electron.ipcRenderer.DbChange((_event, value) => {
-    console.log("DB Change Value === ", value);
-    setResult(false);
-    console.log("My Result is true !");
-  });
+  // window.electron.ipcRenderer.DbChange((_event, value) => {
+  //   console.log("DB Change Value === ", value);
+  //   setResult(false);
+  //   console.log("My Result is true !");
+  // });
 
   // window.electron.ipcRenderer.OrderUpdate((_event, value) => {
   //   console.table("Data Realtime From Electron ", value);
@@ -192,8 +192,8 @@ const Home = () => {
   }, [result, setResult]);
 
   useEffect(() => {
-    const url2 = 'http://localhost:8080/set-appId-access';
-    reqBody = {
+    const url2 = 'http://localhost:8091/set-appId-access';
+    const reqBody = {
       'id': '1'
     };
 
@@ -205,7 +205,7 @@ const Home = () => {
       })
 
     setInterval(() => {
-      axios.get('http://localhost:8080/get-positions')
+      axios.get('http://localhost:8091/get-positions')
         .then(function (response) {
           //console.log(response.data.success);
           setPositions(response.data.success.netPositions);
